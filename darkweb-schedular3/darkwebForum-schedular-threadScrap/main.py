@@ -18,18 +18,17 @@ def scrapping():
         time.sleep(5)
         if collection2.count_documents({'isUrgent':True})>0:
                 print(f"No of urgent websites :{collection2.count_documents({'isUrgent':True})}")
-                urgent1=collection1.find()
-                urgent2=collection2.find({"isUrgent":True,"status":{"$ne":"running"}},{})
-                getfunction1(urgent1[0],urgent2) 
+                urgent=collection2.find({"isUrgent":True,"status":{"$ne":"running"}},{})
+                getfunction1(urgent) 
      
-        # else:
-        #     d = datetime.today() - timedelta(hours=0, minutes=30)
-        #     if collection1.count_documents({"status":{"$ne":"running"},"time":{"$lte":d}})>0:
-        #         print(f"No of websites whose status not running: {collection1.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
-        #         urlList =collection1.find({"status":{"$ne":"running"},"time":{"$lte":d}},{})
-        #         getfunction1(urlList[0])    
-        #     else:
-        #         print("Every url Scrapped!!") 
+        else:
+            d = datetime.today() - timedelta(hours=0, minutes=30)
+            if collection2.count_documents({"status":{"$ne":"running"},"time":{"$lte":d}})>0:
+                print(f"No of websites whose status not running: {collection2.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
+                urlList =collection2.find({"status":{"$ne":"running"},"time":{"$lte":d}},{})
+                getfunction1(urlList)    
+            else:
+                print("Every url Scrapped!!") 
                 
     else:
         print("Node is Busy!!")        
@@ -37,7 +36,6 @@ def scrapping():
 @app.route('/')
 def hello_world():
 	return 'Hello Darkweb!!'  
-
 
 scrapping()
 

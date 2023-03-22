@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import re
 from bs4 import BeautifulSoup
 import pymongo
+from statusHandler import *
 import time
 import calendar
 
@@ -213,20 +214,28 @@ def date_coverter(input_date):
 
 
 
-def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn=[None,None]):  
+def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn=[None,None],failedCount=0):  
     
     
     
     driver = webdriver.Chrome('chromedriver.exe')
     
     for p in range(min(len(threadUrls),len(lastModDate))):
-        
+        url=threadUrls[p]        
         try:
-            driver.get(threadUrls[p])
+            print(url,"is Scrapping now...")
+            # sendLog(url,"is Scrapping now...")
+            scrapRunning(url)
+            driver.get(url)
             time.sleep(1)
             
         except:
-            pass
+            print("not Scrapped!!---->",url)
+            # sendLog("not Scrapped!!---->",url) #test 3
+            print("FailedCount is:",str(int(failedCount)+1))
+            # sendLog("FailedCount is:",str(failedCount+1))  #test 2
+            scrapFailed(url,int(failedCount)) 
+            isNodeBusy =False
         try:      
             type,path =title_path
             title=driver.find_element(selector(type),str(path))
@@ -357,3 +366,7 @@ def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path
             if len(allPosts)>0:
                 dct={'title':title,'url':threadUrls[p],'posts':allPosts,'lastModifiedDate':lastModDate[p]}
                 print(dct)
+                scrapSuccess(url)
+                print(url," Scrapping Done!!")
+                # # sendLog(url," Scrapping Done!!")
+                isNodeBusy =False
