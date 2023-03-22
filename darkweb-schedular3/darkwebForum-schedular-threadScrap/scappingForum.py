@@ -8,7 +8,6 @@ import pymongo
 from statusHandler import *
 import time
 import calendar
-
 # client=pymongo.MongoClient('mongodb://localhost:27017/')
 # db=client['automation']
 # collection=db['1']
@@ -216,12 +215,10 @@ def date_coverter(input_date):
 
 def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn=[None,None],failedCount=0):  
     
-    
-    
     driver = webdriver.Chrome('chromedriver.exe')
     
     for p in range(min(len(threadUrls),len(lastModDate))):
-        url=threadUrls[p]        
+        url=threadUrls[p]     
         try:
             print(url,"is Scrapping now...")
             # sendLog(url,"is Scrapping now...")
@@ -236,14 +233,15 @@ def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path
             # sendLog("FailedCount is:",str(failedCount+1))  #test 2
             scrapFailed(url,int(failedCount)) 
             isNodeBusy =False
+            
         try:      
             type,path =title_path
             title=driver.find_element(selector(type),str(path))
             element_html=title.get_attribute('outerHTML')
             title=BeautifulSoup(element_html,'html.parser')
             title=title.text
-        except:
-            title='not found'    
+        except:   
+            title='not found'
 
         allPosts=[]
         prev_url=None

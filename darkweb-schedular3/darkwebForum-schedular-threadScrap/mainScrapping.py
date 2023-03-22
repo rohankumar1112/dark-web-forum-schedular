@@ -1,13 +1,11 @@
-from statusHandler import *
-from databaseConnection import *
+from databaseConnection import collection1,collection2
 from flag import isNodeBusy
 # from flag import sendLog
 from scappingForum import forum_scrap
 
-# Scrapping...
 isNodeBusy = False
 
-def getfunction1(data2):
+def getfunction(data):
         Urls =[]
         Lastmods =[]
         isNodeBusy =True
@@ -21,7 +19,7 @@ def getfunction1(data2):
         path_of_next_btn =None
         expand_btn =None
         failedCount =None
-        for x in data2:
+        for x in data:
                 Urls.append(x['url'])
                 Lastmods.append(x['lastModDate'])  
                 domain= x['url'].split('.')[0]
@@ -36,25 +34,9 @@ def getfunction1(data2):
                 path_of_next_btn =dataByDomain['path_of_next_btn']
                 expand_btn =dataByDomain['expand_btn']
                 failedCount =dataByDomain['failedCount']
-                
-        
         try:
                 forum_scrap(Urls,Lastmods,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn,failedCount)
-                
-                # print(url,"is Scrapping now...")
-                # # sendLog(url,"is Scrapping now...")
-                # scrapRunning(url)
-        
-                # # scrapSuccess(url)
-                # # print(url," Scrapping Done!!")
-                # # # sendLog(url," Scrapping Done!!")
-                # # isNodeBusy =False
         except:
                pass
-                # print("not Scrapped!!---->",url)
-                # # sendLog("not Scrapped!!---->",url) #test 3
-                # print("FailedCount is:",str(failedCount+1))
-                # # sendLog("FailedCount is:",str(failedCount+1))  #test 2
-                # scrapFailed(url,failedCount) 
-                # isNodeBusy =False
+                
                 

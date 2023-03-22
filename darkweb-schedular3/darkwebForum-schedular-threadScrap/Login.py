@@ -17,24 +17,10 @@ def is_continuous(arr, sub_arr):
             return True
     return False
 
-# def Driver():
-#     with TorBrowserDriver("/home/rohan/Downloads/tor-browser-linux64-12.0.1_ALL/tor-browser") as driver:
-#          driver.get('http://rampjcdlqvgkoz5oywutpo6ggl7g6tvddysustfl6qzhr5osr24xxqqd.onion')
-#         return driver
-
 
 def detect_login(driver,url):
     driver.get(url)
-    # with TorBrowserDriver("/home/rohan/Downloads/tor-browser-linux64-12.0.1_ALL/tor-browser") as driver:
-    #     # driver.get('http://rampjcdlqvgkoz5oywutpo6ggl7g6tvddysustfl6qzhr5osr24xxqqd.onion')
-    #     # driver.get('http://ezdhgsy2aw7zg54z6dqsutrduhl22moami5zv2zt6urr6vub7gs6wfad.onion')
-    #     # driver.get('http://cryptbbtg65gibadeeo2awe3j7s6evg7eklserehqr4w4e2bis5tebid.onion')
-    #     # driver.get('https://corsair.wtf/topic/9595-valorant-no-recoil-hack-program/')
-    #     driver.get('http://cryptbbtg65gibadeeo2awe3j7s6evg7eklserehqr4w4e2bis5tebid.onion/member.php?action=login')
-
-    # main_driver =Driver()
     time.sleep(2)
-    # my_title = main_driver.title
     my_title = driver.title
     print(my_title)
     LOwer_Title=my_title.lower()
@@ -54,7 +40,6 @@ def detect_login(driver,url):
             if x=="true":
                 driver,url = login_fill(driver)
                 login_button_detect(driver,url)
-                
         else:
             pass
             print("not login.")               
@@ -97,29 +82,16 @@ def login_fill(driver):
                 except:
                     pass
 
-                # if(f.find_element(By.CLASS_NAME,'button')):
-
-                #     f.find_element(By.CLASS_NAME,'button').click() 
-
-                
-                time.sleep(10)    
+                time.sleep(8)    
 
             except:
                 pass
-        
-            time.sleep(10)
-            # url = driver
             
     return driver,currentUrl
 
 def login_button_detect(driver,url):
-    
-
-    # urls = ['https://cardingforum.cx/','https://forum.defcon.org/','https://breached.vc']
 
     login_button_texts = ['LOGIN','LOG IN','LogIn','Log In','Login','Log in','login','log in','SIGNIN','SIGN IN','SignIn','Sign In','Signin','Sign in','signin','sign in','Login or Sign Up']
-
-    # for url in urls :
     driver.get(url)
     time.sleep(2)
             
@@ -140,7 +112,6 @@ def login_button_detect(driver,url):
                         
                         except NoSuchElementException:
                             continue
-
     try :
         login_button.click()
                     
@@ -148,8 +119,3 @@ def login_button_detect(driver,url):
         driver.get(login_button.get_attribute("href"))
                     
     time.sleep(10)
-    
-    
-# d =uc.Chrome()    
-# detect_login(d,"https://www.fb.com")    
-# detect_login(d,"https://www.blackhatworld.com/forums/")    
