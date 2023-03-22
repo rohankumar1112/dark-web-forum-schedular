@@ -7,12 +7,19 @@ from scappingForum import forum_scrap
 # Scrapping...
 isNodeBusy = False
 
-def getfunction1(data):
+def getfunction1(data,data2):
+        print("start!!!")
+        Urls =[]
+        Lastmods =[]
+        for x in data2:
+            Urls.append(x['url'])
+            Lastmods.append(x['lastModDate'])    
         print("Scrapping in progress...")
         # sendLog("Scrapping in progress...")
         isNodeBusy =True
-        url =data['site']
-        lastmod,title_path =data['lastmod,title_path']
+        # url =data2['url']
+        # lastmod=data2['lastModDate']
+        title_path=data['title_path']
         iterator_path =data['iterator_path']
         author_name_path =data['author_name_path']
         profile_link_path =data ['profile_link_path']
@@ -23,20 +30,23 @@ def getfunction1(data):
         expand_btn =data['expand_btn']
         failedCount =data['failedCount']
         
-        try:              
-                print(url,"is Scrapping now...")
-                # sendLog(url,"is Scrapping now...")
-                scrapRunning(url)
-                forum_scrap(url,lastmod,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn)
-                scrapSuccess(url)
-                print(url," Scrapping Done!!")
-                # sendLog(url," Scrapping Done!!")
-                isNodeBusy =False
+        try:
+                forum_scrap(Urls,Lastmods,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn)
+
+                # print(url,"is Scrapping now...")
+                # # sendLog(url,"is Scrapping now...")
+                # scrapRunning(url)
+                
+                # scrapSuccess(url)
+                # print(url," Scrapping Done!!")
+                # # sendLog(url," Scrapping Done!!")
+                # isNodeBusy =False
         except:
-                print("not Scrapped!!---->",url)
-                # sendLog("not Scrapped!!---->",url) #test 3
-                print("FailedCount is:",str(failedCount+1))
-                # sendLog("FailedCount is:",str(failedCount+1))  #test 2
-                scrapFailed(url,failedCount) 
-                isNodeBusy =False
+               pass
+                # print("not Scrapped!!---->",url)
+                # # sendLog("not Scrapped!!---->",url) #test 3
+                # print("FailedCount is:",str(failedCount+1))
+                # # sendLog("FailedCount is:",str(failedCount+1))  #test 2
+                # scrapFailed(url,failedCount) 
+                # isNodeBusy =False
                 

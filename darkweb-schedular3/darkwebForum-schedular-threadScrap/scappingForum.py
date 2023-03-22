@@ -7,17 +7,13 @@ from bs4 import BeautifulSoup
 import pymongo
 import time
 import calendar
-from databaseConnection import collection3
-from Login import *
 
 # client=pymongo.MongoClient('mongodb://localhost:27017/')
 # db=client['automation']
 # collection=db['1']
 
-        
-def addingToDB(data):
-    collection3.insert_one(data)
 
+        
 def press_next_btn(driver,path_of_next_btn) :
     try :
         type,path = path_of_next_btn
@@ -33,6 +29,7 @@ def press_next_btn(driver,path_of_next_btn) :
         return False
     except ElementNotInteractableException:
         return False
+    
 
 def selector(type):
     if type=='XPATH':
@@ -47,7 +44,8 @@ def selector(type):
         return By.TAG_NAME
     else:
         print('Wrong path_type')
-      
+        
+        
 # functions for dataTime--------------------
 
 def clndate(date,date_formats):
@@ -195,6 +193,8 @@ def date_formating(date_string):
                 return new_date_string
             except:
                 pass
+            
+            
 
 def date_coverter(input_date):
     try:
@@ -211,13 +211,20 @@ def date_coverter(input_date):
         except:
             pass
 
-def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn=[None,None]):  
 
+
+def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn=[None,None]):  
+    
+    
+    
     driver = webdriver.Chrome('chromedriver.exe')
-    for threadUrl in threadUrls:
+    
+    for p in range(min(len(threadUrls),len(lastModDate))):
+        
         try:
-            driver.get(threadUrl)
+            driver.get(threadUrls[p])
             time.sleep(1)
+            
         except:
             pass
         try:      
@@ -348,47 +355,5 @@ def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path
                 pass
 
             if len(allPosts)>0:
-                dct={'title':title,'url':threadUrl,'posts':allPosts,'lastModifiedDate':lastModDate}
+                dct={'title':title,'url':threadUrls[p],'posts':allPosts,'lastModifiedDate':lastModDate[p]}
                 print(dct)
-                addingToDB(dct)
-
-# # On forums home page
-# site='https://www.blackhatworld.com/forums/'
-# sectionPath=[['CSS_SELECTOR','#top > div.xb-page-wrapper.xb-canvas-menuActive > div.xb-content-wrapper > div.p-body > div > div.p-body-main.p-body-main--withSidebar > div.p-body-content > div.p-body-pageContent > div.block.block--category.block--category73.collapsible-nodes > div > div.block-body.block-body--collapsible.is-active.nodenormal > div.node.node--id302.node--depth2.node--forum.node--unread > div > div.node-main.js-nodeMain > h3 > a']] 
-# urlPath=['CSS_SELECTOR','div.structItem-title>a']
-# path_of_sectionNext_btn=['CSS_SELECTOR','a.pageNav-jump.pageNav-jump--next']
-
-
-# # inside thread link-----------------
-# title_path=['CSS_SELECTOR'," #top  div.p-title > h1.p-title-value"]
-# iterator_path=["CSS_SELECTOR","article.message.message--post.js-post.js-inlineModContainer"]
-# author_name_path=["CSS_SELECTOR","h4.message-name span"]
-# profile_link_path=["CSS_SELECTOR","h4.message-name a"]
-# date_path=["CSS_SELECTOR"," ul.message-attribution-main.listInline > li > a > time.u-dt"]
-# body_path=[['CSS_SELECTOR',"div.bbWrapper"]] #list of list
-# media_path=[['CSS_SELECTOR',"div.bbWrapper a"],['CSS_SELECTOR',"div.bbWrapper img"]]  #list of list
-# path_of_next_btn=["CSS_SELECTOR","a.pageNav-jump.pageNav-jump--next"]
-# expand_btn=[None,None]
-
-
-# On forums home page
-# site='https://corsair.wtf/'
-# sectionPath=[['CSS_SELECTOR','#ipsLayout_mainArea > section > ol > li:nth-child(1) > ol > li:nth-child(6) > div.ipsDataItem_main > h4 > a']] 
-# urlPath=['CSS_SELECTOR','span.ipsType_break.ipsContained >a']
-# path_of_sectionNext_btn=['CSS_SELECTOR','li.ipsPagination_next>a']
-
-
-# inside thread link-----------------
-# title_path=['XPATH',"//span[@class='ipsType_break ipsContained']"]
-# iterator_path=['XPATH',"//article[@class='cPost ipsBox ipsResponsive_pull  ipsComment  ipsComment_parent ipsClearfix ipsClear ipsColumns ipsColumns_noSpacing ipsColumns_collapsePhone    ']"]
-# author_name_path=['XPATH',"./div/div[2]/h3/a"]
-# profile_link_path=['XPATH',"./div/div[2]/h3/a"]
-# date_path=['XPATH',"./div/div[2]/div/a/time"]
-# body_path=[['XPATH',"./div[2]/div/div[2]/div/p"]] #list of list
-# media_path=[['CSS_SELECTOR'," div.ipsType_normal.ipsType_richText.ipsPadding_bottom.ipsContained > p > a"],['CSS_SELECTOR'," div.ipsType_normal.ipsType_richText.ipsPadding_bottom.ipsContained > p > span > strong > a"]]  #list of list
-# path_of_next_btn=["CSS_SELECTOR","li.ipsPagination_next > a"]
-# expand_btn=[None,None]
-
-# url=['https://corsair.wtf/topic/23910-valorant-hacks-discord/','https://corsair.wtf/topic/15106-eucheatscom-cheap-undetected-premium-valorant-cheats-hacks-2023/']
-# lastmod=None
-# forum_scrap(url,lastmod,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn)

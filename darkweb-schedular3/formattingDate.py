@@ -177,9 +177,7 @@ def date_coverter(input_date):
     timestamp = int(dt.timestamp())
     return timestamp
 
-
-
-print(date_coverter("1 min ago")) #add input
+print(date_coverter("2023-01-17T17:40:42Z")) #add input
 
 
 # 1 min ago
@@ -195,6 +193,8 @@ print(date_coverter("1 min ago")) #add input
 # 1 years ago
 # 1 months ago
 # February 22, 2022
+
+# -----done---
 
 
 
