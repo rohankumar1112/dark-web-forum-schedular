@@ -20,7 +20,7 @@ def clndate(date,date_formats):
         pass
 
 def date_formating(date_string):
-    date_formats = [ '%Y-%m-%d %H:%M:%S', '%Y-%m-%d','%m-%d-%Y', '%Y/%m/%d,%H:%M:%S', '%d-%m-%Y','%d-%m-%Y,%H:%M:%S','%m-%d-%Y,%H:%M:%S', '%d-%m-%Y %H:%M:%S', '%B %d, %Y, %I:%M %p', '%b %d, %Y, %I:%M %p', '%Y%m%dT%H%M%S.%fZ', '%Y%m%dT%H%M%S.%f%z', '%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%S.%f%z', '%Y-%m-%dT%H:%M:%S.%f', '%Y/%m/%d', '%d.%m.%Y', '%d.%m.%Y %H:%M:%S', '%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M', '%d/%m/%y %H:%M:%S', '%d/%m/%y %H:%M', '%m/%d/%Y %H:%M:%S', '%m/%d/%Y %I:%M:%S %p', '%m/%d/%Y %I:%M %p', '%m/%d/%y %I:%M:%S %p', '%m/%d/%y %I:%M %p', '%d %B %Y', '%d %b %Y', '%d %B %y', '%d %b %y', '%d,%m,%Y,%I:%M %p', '%m,%d,%Y,%I:%M:%S %p', '%Y,%m,%d,%H:%M:%S', '%m,%d,%y,%I:%M:%S %p', '%d,%b,%Y,%I:%M %p', '%d/%m/%Y %H:%M:%S.%f', '%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%S.%f%z','%m-%d-%Y, %I:%M %p','%Y-%m-%dT%H:%M:%S+00:00','%Y-%m-%dT%H:%M:%S','%Y-%m-%dT%H:%MZ','%Y-%m-%dT%H:%M:%S+0000']
+    date_formats = [ '%Y-%m-%d %H:%M:%S', '%Y-%m-%d','%m-%d-%Y', '%Y/%m/%d,%H:%M:%S', '%d-%m-%Y','%d-%m-%Y,%H:%M:%S','%m-%d-%Y,%H:%M:%S', '%d-%m-%Y %H:%M:%S', '%B %d, %Y, %I:%M %p', '%b %d, %Y, %I:%M %p', '%Y%m%dT%H%M%S.%fZ', '%Y%m%dT%H%M%S.%f%z', '%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%S.%f%z', '%Y-%m-%dT%H:%M:%S.%f', '%Y/%m/%d', '%d.%m.%Y', '%d.%m.%Y %H:%M:%S', '%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M', '%d/%m/%y %H:%M:%S', '%d/%m/%y %H:%M', '%m/%d/%Y %H:%M:%S', '%m/%d/%Y %I:%M:%S %p', '%m/%d/%Y %I:%M %p', '%m/%d/%y %I:%M:%S %p', '%m/%d/%y %I:%M %p', '%d %B %Y', '%d %b %Y', '%d %B %y', '%d %b %y', '%d,%m,%Y,%I:%M %p', '%m,%d,%Y,%I:%M:%S %p', '%Y,%m,%d,%H:%M:%S', '%m,%d,%y,%I:%M:%S %p', '%d,%b,%Y,%I:%M %p', '%d/%m/%Y %H:%M:%S.%f', '%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%S.%f%z','%m-%d-%Y, %I:%M %p','%Y-%m-%dT%H:%M:%S+00:00','%Y-%m-%dT%H:%M:%S','%Y-%m-%dT%H:%MZ','%Y-%m-%dT%H:%M:%S+0000','%Y-%m-%dT%H:%M:%S+01:00','%Y-%m-%dT%H:%M:%S+0100','%Y-%m-%dT%H:%M:%S+0200','%Y-%m-%dT%H:%M:%S+0300','%Y-%m-%dT%H:%M:%S+0400','%Y-%m-%dT%H:%M:%S+0500','%Y-%m-%dT%H:%M:%S+0600','%Y-%m-%dT%H:%M:%S+0700','%Y-%m-%dT%H:%M:%S+0800','%Y-%m-%dT%H:%M:%S+0900','%Y-%m-%dT%H:%M:%S+01:00','%Y-%m-%dT%H:%M:%S+02:00','%Y-%m-%dT%H:%M:%S+03:00','%Y-%m-%dT%H:%M:%S+04:00','%Y-%m-%dT%H:%M:%S+05:00','%Y-%m-%dT%H:%M:%S+06:00','%Y-%m-%dT%H:%M:%S+07:00','%Y-%m-%dT%H:%M:%S+08:00','%Y-%m-%dT%H:%M:%S+09:00']
 
     for date_format in date_formats:
         try:
@@ -51,7 +51,21 @@ def date_formating(date_string):
                 return new_date_string
             except:
                 pass
-            
+            #Today with HOURS AGO
+            try:      
+                match = re.search("(\d+) HOURS AGO", date_string) or re.search("(\d+) Hours Ago", date_string) or re.search("(\d+) Hours", date_string) or re.search("(\d+) hrs ago", date_string) or re.search("(\d+) HRS AGO", date_string)
+                if match:
+                    hours = int(match.group(1))
+                else:
+                    raise ValueError("Invalid date string format")
+                now = datetime.now()
+                date_object = now - timedelta(hours=hours)
+
+                new_format="%Y-%m-%d %H:%M:%S"
+                new_date_string = date_object.strftime(new_format)
+                return new_date_string
+            except:
+                pass
             #Days (25 Days ago)
             try:      
                 match = re.search("(\d+) days", date_string) or re.search("(\d+) Days", date_string) or re.search("(\d+) day", date_string) or re.search("(\d+) Day", date_string) or re.search("(\d+) hrs.", date_string) 
@@ -203,9 +217,7 @@ def date_coverter(input_date):
     timestamp = int(dt.timestamp())
     return timestamp
 
-print(date_coverter("February 3")) #add input
-
-
+print(date_coverter("2023-03-03T14:08:08")) #add input
 
 
 # ----done ------
@@ -232,6 +244,8 @@ print(date_coverter("February 3")) #add input
 # Sunday,11pm
 # March 2
 # February 3
+# 2023-03-03T14:08:08
+# '2023-03-03T14:08:08'
 
 
 # -----done---
@@ -245,3 +259,7 @@ print(date_coverter("February 3")) #add input
 # December 3, 2022
 # January 29, 2023, 04:14
 # Sep 6,2022
+
+
+
+
