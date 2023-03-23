@@ -8,6 +8,9 @@ import pymongo
 from statusHandler import *
 import time
 import calendar
+from Login import detect_login
+from driverpath import torPath
+from databaseConnection import *
 # client=pymongo.MongoClient('mongodb://localhost:27017/')
 # db=client['automation']
 # collection=db['1']
@@ -193,8 +196,7 @@ def date_formating(date_string):
                 return new_date_string
             except:
                 pass
-            
-            
+       
 
 def date_coverter(input_date):
     try:
@@ -211,20 +213,19 @@ def date_coverter(input_date):
         except:
             pass
 
-
-
 def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path,profile_link_path,date_path,body_path,media_path,path_of_next_btn,expand_btn=[None,None],failedCount=0):  
     
     driver = webdriver.Chrome('chromedriver.exe')
     
     for p in range(min(len(threadUrls),len(lastModDate))):
-        url=threadUrls[p]     
+        url=threadUrls[p]    
         try:
             print(url,"is Scrapping now...")
             # sendLog(url,"is Scrapping now...")
             scrapRunning(url)
             driver.get(url)
             time.sleep(1)
+            detect_login(driver,url)
             
         except:
             print("not Scrapped!!---->",url)
@@ -246,6 +247,8 @@ def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path
         allPosts=[]
         prev_url=None
         if title  !='not found':
+            
+
             while True:
                 type,path = iterator_path
                 iterator=driver.find_elements(selector(type),path)
@@ -364,7 +367,15 @@ def forum_scrap(threadUrls,lastModDate,title_path,iterator_path,author_name_path
             if len(allPosts)>0:
                 dct={'title':title,'url':threadUrls[p],'posts':allPosts,'lastModifiedDate':lastModDate[p]}
                 print(dct)
+                collection3.insert_one(dct)
                 scrapSuccess(url)
                 print(url," Scrapping Done!!")
                 # # sendLog(url," Scrapping Done!!")
                 isNodeBusy =False
+        else:
+            print("not Scrapped!!---->",url)
+            # sendLog("not Scrapped!!---->",url) #test 3
+            print("FailedCount is:",str(int(failedCount)+1))
+            # sendLog("FailedCount is:",str(failedCount+1))  #test 2
+            scrapFailed(url,int(failedCount)) 
+            isNodeBusy =False       

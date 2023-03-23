@@ -42,7 +42,7 @@ def detect_login(driver,url):
                 login_button_detect(driver,url)
         else:
             pass
-            print("not login.")               
+            # print("not login.")               
 
 def login_fill(driver):
     time.sleep(2)

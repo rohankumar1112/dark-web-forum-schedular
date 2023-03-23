@@ -36,6 +36,22 @@ def date_formating(date_string):
             except:
                 pass  
                         
+            #Yesterday
+            try:      
+                match = re.search("(\d+) yesterday", date_string) or re.search("(\d+) Yesterday", date_string) or re.search("(\d+) yest", date_string) or re.search("(\d+) Yest", date_string) or re.search("yesterday", date_string)
+                if match:
+                    hours = int(match.group(1))
+                else:
+                    raise ValueError("Invalid date string format")
+                now = datetime.now()
+                date_object = now - timedelta(hours=hours)
+
+                new_format="%Y-%m-%d %H:%M:%S"
+                new_date_string = date_object.strftime(new_format)
+                return new_date_string
+            except:
+                pass
+
             #Today with hrs
             try:      
                 match = re.search("(\d+) hours", date_string) or re.search("(\d+) Hours", date_string) or re.search("(\d+) hrs", date_string) or re.search("(\d+) Hrs", date_string) or re.search("(\d+) hrs.", date_string) or re.search("(\d+) Hrs.", date_string) or re.search("Today,(\d+) hours", date_string) or re.search("Today,(\d+) Hours", date_string) or re.search("Today,(\d+) hrs", date_string) or re.search("Today,(\d+) Hrs", date_string) or re.search("Today,(\d+) hrs.", date_string) or re.search("Today,(\d+) Hrs.", date_string)  or re.search("today,(\d+) hours", date_string) or re.search("today,(\d+) Hours", date_string) or re.search("today,(\d+) hrs", date_string) or re.search("today,(\d+) Hrs", date_string) or re.search("today,(\d+) hrs.", date_string) or re.search("today,(\d+) Hrs.", date_string)
@@ -50,7 +66,8 @@ def date_formating(date_string):
                 new_date_string = date_object.strftime(new_format)
                 return new_date_string
             except:
-                pass
+                pass        
+
             #Today with HOURS AGO
             try:      
                 match = re.search("(\d+) HOURS AGO", date_string) or re.search("(\d+) Hours Ago", date_string) or re.search("(\d+) Hours", date_string) or re.search("(\d+) hrs ago", date_string) or re.search("(\d+) HRS AGO", date_string)
@@ -204,6 +221,33 @@ def date_formating(date_string):
                 return final_string
 
             except:
+                pass  
+
+            try:
+                date_pattern =r'(\d+)(?:st|nd|rd|th)\s+(\w+)\s+(\d+),\s+(\d+):(\d+)\s+(AM|PM)'
+
+                match = re.match(date_pattern, date_string)
+                day_str, month_str, year_str, hour_str, minute_str, am_pm_str = match.groups()
+
+                day_int = int(day_str)
+                year_int = int(year_str)
+
+                month_num = datetime.datetime.strptime(month_str, '%B').month
+
+                if am_pm_str == 'PM' and hour_str != '12':
+                    hour_int = int(hour_str) + 12
+                elif am_pm_str == 'AM' and hour_str == '12':
+                    hour_int = 0
+                else:
+                    hour_int = int(hour_str)
+
+                datetime_obj = datetime.datetime(year_int, month_num, day_int, hour_int, int(minute_str))
+
+                formatted_str = datetime_obj.strftime('%Y-%m-%d %H:%M:%S')
+                return formatted_str
+  
+
+            except:
                 pass    
 
 
@@ -211,13 +255,13 @@ def date_formating(date_string):
             
 def date_coverter(input_date):
     output = date_formating(input_date)
-    # print(output)
+    print(output)
     dt = datetime.strptime(output, "%Y-%m-%d %H:%M:%S")
     print(dt)
     timestamp = int(dt.timestamp())
     return timestamp
 
-print(date_coverter("2023-03-03T14:08:08")) #add input
+print(date_coverter("29th May 2021, 03:43 PM")) #add input
 
 
 # ----done ------
