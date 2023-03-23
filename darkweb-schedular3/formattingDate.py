@@ -159,6 +159,7 @@ def date_formating(date_string):
                 if match.group(3) == 'pm':
                     hour += 12
 
+
                 now = datetime.now()
                 days_until_next_day_of_week = (7 - now.weekday() + ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun' ,'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ].index(day_of_week)) % -7
                 next_day_of_week = now + timedelta(days=days_until_next_day_of_week)
@@ -172,54 +173,27 @@ def date_formating(date_string):
                 pass   
 
 
-# -----------------------------------------------------------------------------------------
+            try:
+                date_pattern = r'(\w+?)\s+(\d{1,2})'
 
-            # # February 22, 2022   #error 
-            # try:      
-            #     match = re.search(r"(\w+) (\d+), (\d+)") 
-            #     if match:
-            #         month = match.group(1)
-            #         day = match.group(2)
-            #         year = match.group(3)
-            #     else:
-            #         raise ValueError("Invalid date string format")
-            #     # now = datetime.now()
-            #     now = datetime.now()
-            #     date_object = now - timedelta(7*week)
-            #     new_format="%Y-%m-%d %H:%M:%S"
-                
-            #     date_object = datetime.strptime(f"{month} {day} {year}", "%B %d %Y")
-            #     print(date_object)
-            #     new_date_string = date_object.strftime("%Y-%m-%d %H:%M:%S")
-            #     return new_date_string
-            # except:
-            #     pass
+                match = re.match(date_pattern, date_string)
+                month = match.group(1)
+                day = int(match.group(2))
 
-            # # December 3, 2022  #error
-            # try:      
-            #     date_pattern = r'(\w+?)\s+(\d{1,2}),\s+(\d{4})'
-            #     time_pattern = r'(\d{1,2})(am|pm)'
+                year = datetime.now().year
 
-            #     # Extract the date and time information from the string
-            #     match = re.match(f'{date_pattern}\s+{time_pattern}', 'December 3, 2022 11pm')
-            #     month = match.group(1)
-            #     day = int(match.group(2))
-            #     year = int(match.group(3))
-            #     hour = int(match.group(4))
-            #     if match.group(5) == 'pm':
-            #         hour += 12
+                dt = datetime(year, datetime.strptime(month, '%B').month, day, 0, 0, 0)
 
-            #     # Create a datetime object with the extracted date and time information
-            #     dt = datetime(year, datetime.strptime(month, '%B').month, day, hour, 0, 0)
+                final_string = dt.strftime('%Y-%m-%d %H:%M:%S')
 
-            #     # Convert the datetime object into the desired format
-            #     final_string = dt.strftime('%Y-%m-%d %H:%M:%S')
+                print(final_string) 
+                return final_string
 
-            #     return final_string
-            # except:
-            #     pass
+            except:
+                pass    
 
-             
+
+
             
 def date_coverter(input_date):
     output = date_formating(input_date)
@@ -229,7 +203,7 @@ def date_coverter(input_date):
     timestamp = int(dt.timestamp())
     return timestamp
 
-print(date_coverter("sunday,11pm")) #add input
+print(date_coverter("February 3")) #add input
 
 
 
@@ -256,6 +230,8 @@ print(date_coverter("sunday,11pm")) #add input
 # 2023-01-02T02:31:40+0000
 # 01-21-2008, 03:35 PM
 # Sunday,11pm
+# March 2
+# February 3
 
 
 # -----done---
@@ -263,8 +239,7 @@ print(date_coverter("sunday,11pm")) #add input
 # 01-21-2008, 03:35 PM (This post was last modified: 01-21-2008, 04:18 PM by Kuroda_Shun.)
 # This post was last modified: March 26, 2022, 12:12 AM by Ura.)
 # Saturday at 01:25
-# March 2
-# February 3
+
 # February 22, 2022
 # November 2, 2022
 # December 3, 2022
