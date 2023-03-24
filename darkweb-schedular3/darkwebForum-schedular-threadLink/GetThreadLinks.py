@@ -12,7 +12,7 @@ from databaseConnection import collection2
 from WordLists import wordList
 import calendar
 from Login import detect_login,login_button_detect
-import undetected_chromedriver as uc
+# import undetected_chromedriver as uc
 
         
 def addingToDB(data):
@@ -307,6 +307,7 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
             allData.append(dct)
         # return allData
         addingToDB(allData)
+        print(len(threadLinks))
 
 
 

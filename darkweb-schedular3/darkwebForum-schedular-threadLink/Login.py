@@ -4,7 +4,7 @@ from tbselenium.tbdriver import TorBrowserDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
-import undetected_chromedriver as uc
+# import undetected_chromedriver as uc
 from selenium.common.exceptions import NoSuchElementException
 import time
 # from driverpath import *
