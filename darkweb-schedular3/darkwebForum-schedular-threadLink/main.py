@@ -1,5 +1,5 @@
 from databaseConnection import collection1
-from mainScrapping import getfunction1
+from mainScrapping import getfunction
 from datetime import date,datetime,timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 # from flag import sendLog,sendData
@@ -18,14 +18,14 @@ def fetchingLinks():
         time.sleep(5)
         if collection1.count_documents({'isUrgent':True})>0:
                 print(f"No of urgent websites :{collection1.count_documents({'isUrgent':True})}")
-                urgent1=collection1.find({"isUrgent":True,"status":{"$ne":"running"}},{})
-                getfunction1(urgent1[0]) 
+                urgent=collection1.find({"isUrgent":True,"status":{"$ne":"running"}},{})
+                getfunction(urgent[0]) 
         else:
             d = datetime.today() - timedelta(hours=0, minutes=30)
             if collection1.count_documents({"status":{"$ne":"running"},"time":{"$lte":d}})>0:
                 print(f"No of websites whose status not running: {collection1.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
                 urlList =collection1.find({"status":{"$ne":"running"},"time":{"$lte":d}},{})
-                getfunction1(urlList[0])    
+                getfunction(urlList[0])    
             else:
                 print("Every url Scrapped!!") 
                 

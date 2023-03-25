@@ -12,4 +12,6 @@ print ("Total websites we have:", collection1.count_documents( {} ))
 # link dump collection
 collection2 =db['forum_Links']
 
+login_credential=db['login_credentials']
+
 

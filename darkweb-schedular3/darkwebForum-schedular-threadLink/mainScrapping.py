@@ -8,7 +8,7 @@ from GetThreadLinks import getThreadLinks
 isNodeBusy = False
 
 
-def getfunction1(data):
+def getfunction(data):
         print("Scrapping in progress...")
         # sendLog("Scrapping in progress...")
         isNodeBusy =True

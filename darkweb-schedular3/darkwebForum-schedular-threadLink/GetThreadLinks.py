@@ -301,18 +301,6 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
                 except:
                     break
 
-        for _ in range(min(len(threadLinks),len(lastModDates))):
-            dct={'title':threadTitles[_],'url':threadLinks[_],'lastModDate':lastModDates[_],'isUrgent':False,'status':None,"failedCount":0,'time':datetime.now() }
-            print(dct)
-            allData.append(dct)
-        # return allData
-        addingToDB(allData)
-        print(len(threadLinks))
-
-
-
-
-
 
         if len(threadLinks)==0:
             CurrUrl,driver =login_button_detect(driver,siteLink)
@@ -320,7 +308,6 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
             try:
                 driver.get(currentUrl)
                 time.sleep(2)
-                # detect_login(driver, siteLink)
             except:
                 pass
             allSectionLinks=[]
@@ -402,12 +389,21 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
                     except:
                         break
 
-            for _ in range(min(len(threadLinks),len(lastModDates))):
-                dct={'title':threadTitles[_],'url':threadLinks[_],'lastModDate':lastModDates[_],'isUrgent':False,'status':None,"failedCount":0,'time':datetime.now() }
-                print(dct)
-                allData.append(dct)
-            # return allData
-            addingToDB(allData)
+
+
+        for _ in range(min(len(threadLinks),len(lastModDates))):
+            dct={'title':threadTitles[_],'url':threadLinks[_],'lastModDate':lastModDates[_],'isUrgent':False,'status':None,"failedCount":0,'time':datetime.now() }
+            print(dct)
+            allData.append(dct)
+        addingToDB(allData)
+        print(len(threadLinks))
+
+
+
+
+
+
+        
 
 
 
