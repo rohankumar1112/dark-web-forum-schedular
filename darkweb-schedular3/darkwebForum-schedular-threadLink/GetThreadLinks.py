@@ -13,10 +13,24 @@ from WordLists import wordList
 import calendar
 from Login import detect_login,login_button_detect
 # import undetected_chromedriver as uc
+from timestamp_convertor import date_coverter
 
         
-def addingToDB(data):
-    collection2.insert_many(data)
+def addingToDB(allData):
+    for data in allData:
+        url=data['url']
+        check=collection2.find_one({"url": f"{url}"})
+        if check:
+            id=check['_id']
+            db_lastModDate=check['lastModDate']
+            data_lastModDate=data['lastModDate']
+            if db_lastModDate!=data_lastModDate:
+                q={'_id':id}
+                collection2.delete_one(q)
+                collection2.insert_one(data)
+                print('updated')
+        else:
+            collection2.insert_one(data)
 
 def press_next_btn(driver,path_of_next_btn) :
     try :
@@ -68,154 +82,11 @@ def clndate(date,date_formats):
     except:
         pass
 
-def date_formating(date_string):
-    date_formats = [ '%Y-%m-%d %H:%M:%S', '%Y-%m-%d','%m-%d-%Y', '%Y/%m/%d,%H:%M:%S', '%d-%m-%Y','%d-%m-%Y,%H:%M:%S','%m-%d-%Y,%H:%M:%S', '%d-%m-%Y %H:%M:%S', '%B %d, %Y, %I:%M %p', '%b %d, %Y, %I:%M %p', '%Y%m%dT%H%M%S.%fZ', '%Y%m%dT%H%M%S.%f%z', '%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%S.%f%z', '%Y-%m-%dT%H:%M:%S.%f', '%Y/%m/%d', '%d.%m.%Y', '%d.%m.%Y %H:%M:%S', '%d/%m/%Y %H:%M:%S', '%d/%m/%Y %H:%M', '%d/%m/%y %H:%M:%S', '%d/%m/%y %H:%M', '%m/%d/%Y %H:%M:%S', '%m/%d/%Y %I:%M:%S %p', '%m/%d/%Y %I:%M %p', '%m/%d/%y %I:%M:%S %p', '%m/%d/%y %I:%M %p', '%d %B %Y', '%d %b %Y', '%d %B %y', '%d %b %y', '%d,%m,%Y,%I:%M %p', '%m,%d,%Y,%I:%M:%S %p', '%Y,%m,%d,%H:%M:%S', '%m,%d,%y,%I:%M:%S %p', '%d,%b,%Y,%I:%M %p', '%d/%m/%Y %H:%M:%S.%f', '%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%S.%f%z','%m-%d-%Y, %I:%M %p']
-    for date_format in date_formats:
-        try:
-            date_object = datetime.strptime(date_string, date_format)
-            new_format="%Y-%m-%d %H:%M:%S"
-            new_date_string = date_object.strftime(new_format)
-            return new_date_string
-        except :
-            try:
-                new_date_string = clndate(date_string,date_formats)
-                if new_date_string:
-                    return new_date_string
-            except:
-                pass  
-                        
-            #Today with hrs
-            try:      
-                match = re.search("(\d+) hours", date_string) or re.search("(\d+) Hours", date_string) or re.search("(\d+) hrs", date_string) or re.search("(\d+) Hrs", date_string) or re.search("(\d+) hrs.", date_string) or re.search("(\d+) Hrs.", date_string) or re.search("Today,(\d+) hours", date_string) or re.search("Today,(\d+) Hours", date_string) or re.search("Today,(\d+) hrs", date_string) or re.search("Today,(\d+) Hrs", date_string) or re.search("Today,(\d+) hrs.", date_string) or re.search("Today,(\d+) Hrs.", date_string)  or re.search("today,(\d+) hours", date_string) or re.search("today,(\d+) Hours", date_string) or re.search("today,(\d+) hrs", date_string) or re.search("today,(\d+) Hrs", date_string) or re.search("today,(\d+) hrs.", date_string) or re.search("today,(\d+) Hrs.", date_string)
-                if match:
-                    hours = int(match.group(1))
-                else:
-                    raise ValueError("Invalid date string format")
-                now = datetime.now()
-                date_object = now - timedelta(hours=hours)
-
-                new_format="%Y-%m-%d %H:%M:%S"
-                new_date_string = date_object.strftime(new_format)
-                return new_date_string
-            except:
-                pass
-            
-            #Days (25 Days ago)
-            try:      
-                match = re.search("(\d+) days", date_string) or re.search("(\d+) Days", date_string) or re.search("(\d+) day", date_string) or re.search("(\d+) Day", date_string) or re.search("(\d+) hrs.", date_string) 
-                if match:
-                    days = int(match.group(1))
-                else:
-                    raise ValueError("Invalid date string format")
-                now = datetime.now()
-                date_object = now - timedelta(days=days)
-
-                new_format="%Y-%m-%d %H:%M:%S"
-                new_date_string = date_object.strftime(new_format)
-                return new_date_string
-            except:
-                pass
-            
-            #Days (25 months ago)
-            try:      
-                match = re.search("(\d+) month", date_string) or re.search("(\d+) Month", date_string) or re.search("(\d+) months ago", date_string) or re.search("(\d+) Months", date_string) 
-                if match:
-                    months= int(match.group(1))
-                else:
-                    raise ValueError("Invalid date string format")
-                now = datetime.now()
-                date_object = now - timedelta(30*months)
-
-                new_format="%Y-%m-%d %H:%M:%S"
-                new_date_string = date_object.strftime(new_format)
-                return new_date_string
-            except:
-                pass
-                               
-            # today with minutes              
-            try:      
-                match = re.search("(\d+) minutes", date_string) or re.search("(\d+) Minutes", date_string) or re.search("(\d+) min", date_string) or re.search("(\d+) Min", date_string) or re.search("(\d+) min.", date_string) or re.search("(\d+) Min.", date_string) or re.search("Today,(\d+) minutes", date_string) or re.search("Today,(\d+) Minutes", date_string) or re.search("Today,(\d+) min", date_string) or re.search("Today,(\d+) Min", date_string) or re.search("Today,(\d+) min.", date_string) or re.search("Today,(\d+) Min.", date_string)  or re.search("today,(\d+) minutes", date_string) or re.search("today,(\d+) Minutes", date_string) or re.search("today,(\d+) min", date_string) or re.search("today,(\d+) Min", date_string) or re.search("today,(\d+) min.", date_string) or re.search("today,(\d+) Min.", date_string)
-                if match:
-                    minutes = int(match.group(1))
-                else:
-                    raise ValueError("Invalid date string format")
-                now = datetime.now()
-                date_object = now - timedelta(minutes=minutes)
-
-                new_format="%Y-%m-%d %H:%M:%S"
-                new_date_string = date_object.strftime(new_format)
-                return new_date_string
-            except:
-                pass
-            
-            # Seconds ago
-            try:      
-                match = re.search("(\d+) seconds", date_string) or re.search("(\d+) Seconds", date_string) or re.search("(\d+) sec", date_string) or re.search("(\d+) Sec", date_string) or re.search("(\d+) sec.", date_string) or re.search("(\d+) Sec.", date_string)
-                if match:
-                    second = int(match.group(1))
-                else:
-                    raise ValueError("Invalid date string format")
-                now = datetime.now()
-                date_object = now - timedelta(seconds=second)
-
-                new_format="%Y-%m-%d %H:%M:%S"
-                new_date_string = date_object.strftime(new_format)
-                return new_date_string
-            except:
-                pass
-            
-            # Seconds ago
-            try:      
-                match = re.search("(\d+) year", date_string) or re.search("(\d+) Year", date_string) or re.search("(\d+) yrs", date_string) or re.search("(\d+) Yrs", date_string) or re.search("(\d+) yrs.", date_string) or re.search("(\d+) Yrs.", date_string)
-                if match:
-                    years = int(match.group(1))
-                else:
-                    raise ValueError("Invalid date string format")
-                now = datetime.now()
-                date_object = now - timedelta(365*years)
-
-                new_format="%Y-%m-%d %H:%M:%S"
-                new_date_string = date_object.strftime(new_format)
-                return new_date_string
-            except:
-                pass
-            
-            # week ago
-            try:      
-                match = re.search("(\d+) week", date_string) or re.search("(\d+) Week", date_string) or re.search("(\d+) weeks", date_string) or re.search("(\d+) Weeks", date_string) 
-                if match:
-                    week = int(match.group(1))
-                else:
-                    raise ValueError("Invalid date string format")
-                now = datetime.now()
-                date_object = now - timedelta(7*week)
-
-                new_format="%Y-%m-%d %H:%M:%S"
-                new_date_string = date_object.strftime(new_format)
-                return new_date_string
-            except:
-                pass
-
-def date_coverter(input_date):
-    try:
-        output = date_formating(input_date)
-        dt = datetime.strptime(output, "%Y-%m-%d %H:%M:%S")
-        timestamp = dt.timestamp()
-        return int(timestamp)
-    except:
-        try:
-            if ('today' in input_date.lower()) or ('hours' in input_date.lower()) or ('hour' in input_date.lower()) or ('minutes' in input_date.lower()) or ('min' in input_date.lower()):
-                current_GMT = time.gmtime()
-                ts = calendar.timegm(current_GMT)
-                return str(int(ts))
-        except:
-            pass
 
 def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
     with TorBrowserDriver(torPath) as driver:
         # driver.get(siteLink)
         # driver =uc.Chrome()
-    # wordList=['hack','High Quality','Anime Clicker Fight']
         try:
             driver.get(siteLink)
             time.sleep(2)
@@ -392,11 +263,10 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
 
 
         for _ in range(min(len(threadLinks),len(lastModDates))):
-            dct={'title':threadTitles[_],'url':threadLinks[_],'lastModDate':lastModDates[_],'isUrgent':False,'status':None,"failedCount":0,'time':datetime.now() }
+            dct={'title':threadTitles[_],'url':threadLinks[_],'lastModDate':lastModDates[_],'isUrgent':False,'status':None,"failedCount":0,'time':datetime.now()}
             print(dct)
             allData.append(dct)
         addingToDB(allData)
-        print(len(threadLinks))
 
 
 

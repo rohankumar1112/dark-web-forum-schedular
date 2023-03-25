@@ -19,7 +19,9 @@ def scrapping():
         if collection2.count_documents({'isUrgent':True})>0:
                 print(f"No of urgent websites :{collection2.count_documents({'isUrgent':True})}")
                 urgent=collection2.find({"isUrgent":True,"status":{"$ne":"running"}},{})
+                time.sleep(1)
                 getfunction(urgent) 
+
      
         else:
             d = datetime.today() - timedelta(hours=0, minutes=30)

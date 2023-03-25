@@ -1,5 +1,6 @@
 import pymongo
 # MongoDb Connection...
+import pymongo
 client =pymongo.MongoClient("mongodb+srv://emseccomandcenter:TUXnEN09VNM1drh3@cluster0.psiqanw.mongodb.net/?retryWrites=true&w=majority")
 
 #XPATH fetch collection
@@ -14,5 +15,6 @@ collection2 =db['forum_Links']
 
 #Data sump collection
 collection3 =db['mainData_test']
+login_credential=db['login_credentials']
 
 

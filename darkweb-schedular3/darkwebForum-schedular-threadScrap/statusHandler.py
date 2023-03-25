@@ -13,7 +13,7 @@ def scrapFailed(url,failedCount):
         time.sleep(5)
 def scrapRunning(url):
         time.sleep(5)
-        collection2.update_one({"url":url},{'$set':{"status":"running","time":datetime.now()}})
+        collection2.update_one({"url":url},{'$set':{"isUrgent":False,"status":"running","time":datetime.now()}})
         time.sleep(5)
 
 #date-time

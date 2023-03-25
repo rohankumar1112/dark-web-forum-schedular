@@ -15,8 +15,6 @@ def is_continuous(arr, sub_arr):
             return True
     return False
 
-
-
 def detect_login(driver,url):
     driver.get(url)
 
