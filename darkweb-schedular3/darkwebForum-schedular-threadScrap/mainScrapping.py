@@ -11,9 +11,9 @@ def getfunction(data):
         for x in data:
                 Urls.append(x['url'])
                 Lastmods.append(x['lastModDate'])                  
-        print(set(Urls))
+        print(list(set(Urls)))
         try:
-                forum_scrap(set(Urls),set(Lastmods))
+                forum_scrap(list(set(Urls)),list(set(Lastmods)))
         except:
                pass
                 

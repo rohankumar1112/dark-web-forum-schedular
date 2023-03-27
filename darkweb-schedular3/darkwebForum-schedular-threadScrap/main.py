@@ -24,7 +24,7 @@ def scrapping():
 
      
         else:
-            d = datetime.today() - timedelta(hours=0, minutes=30)
+            d = datetime.today() - timedelta(hours=0, minutes=1)
             if collection2.count_documents({"status":{"$ne":"running"},"time":{"$lte":d}})>0:
                 print(f"No of websites whose status not running: {collection2.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
                 urlList =collection2.find({"status":{"$ne":"running"},"time":{"$lte":d}},{})

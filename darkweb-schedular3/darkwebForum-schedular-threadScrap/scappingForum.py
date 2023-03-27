@@ -74,18 +74,19 @@ def press_next_btn(driver,path_of_next_btn) :
     
 
 def selector(type):
-    if type=='XPATH':
-        return By.XPATH
-    elif(type=='CSS_SELECTOR'):
-        return By.CSS_SELECTOR    
-    elif(type=='ID'):
-        return By.ID    
-    elif(type=='CLASS_NAME')  :
-        return By.CLASS_NAME  
-    elif(type=='TAG_NAME'):
-        return By.TAG_NAME
-    else:
-        print('Wrong path_type')
+    if type!=None:
+        if type=='XPATH':
+            return By.XPATH
+        elif(type=='CSS_SELECTOR'):
+            return By.CSS_SELECTOR    
+        elif(type=='ID'):
+            return By.ID    
+        elif(type=='CLASS_NAME')  :
+            return By.CLASS_NAME  
+        elif(type=='TAG_NAME'):
+            return By.TAG_NAME
+        else:
+            print('Wrong path_type')
         
         
 # functions for dataTime--------------------
@@ -138,11 +139,11 @@ def forum_scrap(threadUrls,lastModDate):
                 detect_login(driver,url)
                 
             except:
+                scrapFailed(url,int(failedCount)) 
                 print("not Scrapped!!---->",url)
                 # sendLog("not Scrapped!!---->",url) #test 3
                 print("FailedCount is:",str(int(failedCount)+1))
                 # sendLog("FailedCount is:",str(failedCount+1))  #test 2
-                scrapFailed(url,int(failedCount)) 
                 isNodeBusy =False
                 
             try:      

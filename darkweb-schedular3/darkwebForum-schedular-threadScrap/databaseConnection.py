@@ -16,3 +16,8 @@ collection2 =db['forum_Links']
 #Data sump collection
 collection3 =db['mainData_test']
 login_credential=db['login_credentials']
+
+
+# domain='https://ezdhgsy2aw7zg54z6dqsutrduhl22moami5zv2zt6urr6vub7gs6wfad'
+# dataByDomain=collection1.find_one({'site':{'$regex':domain}})
+# print(dataByDomain)
