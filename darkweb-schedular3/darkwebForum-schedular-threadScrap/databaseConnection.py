@@ -16,5 +16,3 @@ collection2 =db['forum_Links']
 #Data sump collection
 collection3 =db['mainData_test']
 login_credential=db['login_credentials']
-
-

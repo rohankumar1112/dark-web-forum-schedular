@@ -44,7 +44,6 @@ def addToDb(scraped_doc):
                     if post_date > db_date:
                         db_posts.append(post)
                 except:
-                    # db_posts.append(post)
                     pass
             q={'_id':id}
             update = {"$set": {"posts": db_posts,'date_failed_count':0}}
@@ -55,8 +54,6 @@ def addToDb(scraped_doc):
             collection3.update_one(q,update)
     else :
         collection3.insert_one(scraped_doc)
-
-
 
         
 def press_next_btn(driver,path_of_next_btn) :
@@ -95,36 +92,42 @@ def selector(type):
 
 
 def forum_scrap(threadUrls,lastModDate):
-        isNodeBusy =True
-        title_path=None
-        iterator_path =None
-        author_name_path =None
-        profile_link_path =None
-        date_path =None
-        body_path =None
-        media_path =None
-        path_of_next_btn =None
-        expand_btn =None
-        failedCount =None  
+    isNodeBusy =True
+    title_path=None
+    iterator_path =None
+    author_name_path =None
+    profile_link_path =None
+    date_path =None
+    body_path =None
+    media_path =None
+    path_of_next_btn =None
+    expand_btn =None
+    failedCount =0 
     
-        driver = uc.Chrome()
-    # with TorBrowserDriver(torPath) as driver:
+        # driver = uc.Chrome()
+    with TorBrowserDriver(torPath) as driver:
     
         for p in range(min(len(threadUrls),len(lastModDate))):
             
-            url=threadUrls[p]  
+            url=threadUrls[p]
+            failedCount=collection2.find_one({'url':url})['failedCount']  
             domain= url.split('.')[0]
             dataByDomain=collection1.find_one({'site':{'$regex':domain}})
-            title_path=dataByDomain['title_path']
-            iterator_path =dataByDomain['iterator_path']
-            author_name_path =dataByDomain['author_name_path']
-            profile_link_path =dataByDomain ['profile_link_path']
-            date_path =dataByDomain['date_path']
-            body_path =dataByDomain['body_path']
-            media_path =dataByDomain['media_path']
-            path_of_next_btn =dataByDomain['path_of_next_btn']
-            expand_btn =dataByDomain['expand_btn']
-            failedCount =dataByDomain['failedCount']
+            if dataByDomain==None:
+                print('Path not found for this site.')
+                scrapFailed(url,int(failedCount))
+                continue 
+            else:
+                title_path=dataByDomain['title_path']
+                iterator_path =dataByDomain['iterator_path']
+                author_name_path =dataByDomain['author_name_path']
+                profile_link_path =dataByDomain ['profile_link_path']
+                date_path =dataByDomain['date_path']
+                body_path =dataByDomain['body_path']
+                media_path =dataByDomain['media_path']
+                path_of_next_btn =dataByDomain['path_of_next_btn']
+                expand_btn =dataByDomain['expand_btn']
+                failedCount =dataByDomain['failedCount']
 
             try:
                 print(url,"is Scrapping now...")
@@ -155,7 +158,7 @@ def forum_scrap(threadUrls,lastModDate):
             prev_url=None
             if title  !='not found':
                 
-
+            
                 while True:
                     type,path = iterator_path
                     iterator=driver.find_elements(selector(type),path)

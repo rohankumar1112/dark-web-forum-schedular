@@ -176,8 +176,9 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
         if len(threadLinks)==0:
             CurrUrl,driver =login_button_detect(driver,siteLink)
             driver,currentUrl=detect_login(driver,CurrUrl)
+            time.sleep(1)
             try:
-                driver.get(currentUrl)
+                driver.get(siteLink)
                 time.sleep(2)
             except:
                 pass

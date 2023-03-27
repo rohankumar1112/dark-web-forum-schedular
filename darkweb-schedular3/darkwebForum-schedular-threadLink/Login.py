@@ -35,9 +35,8 @@ def detect_login(driver,url):
             print("login page")
             if x=="true":
                 driver,url = login_fill(driver)
-                login_button_detect(driver,url)      
+                # login_button_detect(driver,url)      
         else:
-            pass
             print("not login.")               
 
 def login_fill(driver):
@@ -59,9 +58,9 @@ def login_fill(driver):
                 loginId=loginData['loginId']
                 password=loginData['password']
             except:
+                print('Id and Password not exixt for this site in database.')
                 loginId=None
                 password=None
-                print('Id and Password not exixt for this site in database.')
             try:    
                 username=f.find_elements(By.TAG_NAME,'input')
                 for i in username:
@@ -70,7 +69,7 @@ def login_fill(driver):
             
                     if(i.get_attribute('type')=='password'):
                         i.send_keys(password)
-
+                time.sleep(5)
                 try:
                     if(f.find_element(By.TAG_NAME,'button').text.lower() in login_button_texts ):
                         f.find_element(By.TAG_NAME,'button').click()
@@ -82,9 +81,24 @@ def login_fill(driver):
                         f.find_element(By.TAG_NAME,'button').click()
                 except:
                     pass
+                try:
+                    if(f.find_element(By.TAG_NAME,'button').get_attribute("value").lower() in login_button_texts):
+                        f.find_element(By.TAG_NAME,'button').click()
+                except:
+                    pass
 
                 try:
                     if(f.find_element(By.TAG_NAME,'input').get_attribute("type").lower() in login_button_texts):
+                        f.find_element(By.TAG_NAME,'input').click()
+                except:
+                    pass 
+                try:
+                    if(f.find_element(By.TAG_NAME,'input').get_attribute("value").lower() in login_button_texts):
+                        f.find_element(By.TAG_NAME,'input').click()
+                except:
+                    pass 
+                try:
+                    if(f.find_element(By.TAG_NAME,'input').text.lower() in login_button_texts):
                         f.find_element(By.TAG_NAME,'input').click()
                 except:
                     pass 
@@ -93,21 +107,22 @@ def login_fill(driver):
                 pass
         
             time.sleep(4)
-            
+    currentUrl=driver.current_url
     return driver,currentUrl
 
 def login_button_detect(driver,url):
     login_button_texts = ['LOGIN','LOG IN','LogIn','Log In','Login','Log in','login','log in','SIGNIN','SIGN IN','SignIn','Sign In','Signin','Sign in','signin','sign in','Login or Sign Up']
 
     # for url in urls :
-    driver.get(url)
-    time.sleep(2)
+    currentUrl=driver.current_url
+    if currentUrl!=url:
+        driver.get(url)
+        time.sleep(2)
             
     for login_button_text in login_button_texts :
 
                 try :
                     login_button = driver.find_element(By.XPATH, f"//div[contains(text(),'{login_button_text}')]")
-                    print('hi')
                 except NoSuchElementException:
 
                     try :
@@ -123,10 +138,12 @@ def login_button_detect(driver,url):
 
     try :
         login_button.click()
+        time.sleep(2)
         currentUrl=driver.current_url
                     
     except :
         driver.get(login_button.get_attribute("href"))
+        time.sleep(2)
         currentUrl=driver.current_url
                     
     return currentUrl,driver
