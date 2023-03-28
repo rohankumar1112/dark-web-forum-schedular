@@ -1,3 +1,4 @@
+
 import time
 from selenium import webdriver
 from tbselenium.tbdriver import TorBrowserDriver
@@ -35,10 +36,16 @@ def detect_login(driver,url):
             print("login page")
             if x=="true":
                 driver,url = login_fill(driver)
-                login_button_detect(driver,url)      
-        else:
-            pass
-            print("not login.")               
+                print('*'*100)
+                return True
+                
+                # login_button_detect(driver,url)      
+        # else:
+        #     print('-'*100)
+        #     url,driver=login_button_detect(driver,url)
+        #     login_fill(driver)
+
+                        
 
 def login_fill(driver):
     time.sleep(2)
@@ -50,26 +57,32 @@ def login_fill(driver):
     
     # email_list =
     for f in form:
+        filling_done=False
 
         if((f.get_attribute('method').lower()=='post')):
             domain=currentUrl.split('.')[0]
-            print(domain)
+            # print(domain)
             loginData=login_credential.find_one({'site':{'$regex':domain}})
             try:
                 loginId=loginData['loginId']
                 password=loginData['password']
             except:
+                print('Id and Password not exixt for this site in database.')
                 loginId=None
                 password=None
-                print('Id and Password not exixt for this site in database.')
             try:    
                 username=f.find_elements(By.TAG_NAME,'input')
                 for i in username:
                     if(i.get_attribute('name').lower())in (user_list):
+                        filling_done =True
                         i.send_keys(loginId) 
             
                     if(i.get_attribute('type')=='password'):
                         i.send_keys(password)
+            except:
+                pass
+            
+            if(filling_done==True):
 
                 try:
                     if(f.find_element(By.TAG_NAME,'button').text.lower() in login_button_texts ):
@@ -82,34 +95,57 @@ def login_fill(driver):
                         f.find_element(By.TAG_NAME,'button').click()
                 except:
                     pass
+                try:
+                    if(f.find_element(By.TAG_NAME,'button').get_attribute("value").lower() in login_button_texts):
+                        f.find_element(By.TAG_NAME,'button').click()
+                except:
+                    pass
 
                 try:
                     if(f.find_element(By.TAG_NAME,'input').get_attribute("type").lower() in login_button_texts):
                         f.find_element(By.TAG_NAME,'input').click()
                 except:
                     pass 
+                try:
+                    if(f.find_element(By.TAG_NAME,'input').get_attribute("value").lower() in login_button_texts):
+                        f.find_element(By.TAG_NAME,'input').click()
+                except:
+                    pass 
+                try:
+                    if(f.find_element(By.TAG_NAME,'input').text.lower() in login_button_texts):
+                        f.find_element(By.TAG_NAME,'input').click()
+                except:
+                    pass 
+                try:
+                    if(f.find_element(By.CSS_SELECTOR,'input.button')):
+                        f.find_element(By.CSS_SELECTOR,'input.button').click()
+                except:
+                    pass
+                
+                try:
 
-            except:
-                pass
-        
+                    if(f.find_element(By.CSS_SELECTOR,'input.button1')):
+                        f.find_element(By.CSS_SELECTOR,'input.button1').click()
+                        
+                except:
+                    pass        
             time.sleep(4)
-            
+    currentUrl=driver.current_url
     return driver,currentUrl
 
 def login_button_detect(driver,url):
     login_button_texts = ['LOGIN','LOG IN','LogIn','Log In','Login','Log in','login','log in','SIGNIN','SIGN IN','SignIn','Sign In','Signin','Sign in','signin','sign in','Login or Sign Up']
 
     # for url in urls :
-    driver.get(url)
-    time.sleep(2)
+    currentUrl=driver.current_url
+    if currentUrl!=url:
+        driver.get(url)
+        time.sleep(2)
             
     for login_button_text in login_button_texts :
-
                 try :
                     login_button = driver.find_element(By.XPATH, f"//div[contains(text(),'{login_button_text}')]")
-                    print('hi')
                 except NoSuchElementException:
-
                     try :
                         login_button = driver.find_element(By.XPATH, f"//a[contains(text(),'{login_button_text}')]")
 
@@ -120,15 +156,22 @@ def login_button_detect(driver,url):
                         
                         except NoSuchElementException:
                             continue
+                        
 
     try :
         login_button.click()
+        time.sleep(2)
         currentUrl=driver.current_url
                     
     except :
         driver.get(login_button.get_attribute("href"))
+        time.sleep(2)
         currentUrl=driver.current_url
                     
     return currentUrl,driver
     
-    
+# with TorBrowserDriver("/home/rohan/Downloads/tor-browser-linux64-12.0.1_ALL/tor-browser") as driver:
+#     driver.get('http://cryptbbtg65gibadeeo2awe3j7s6evg7eklserehqr4w4e2bis5tebid.onion/member.php?action=login') 
+#     detect_login(driver,'http://cryptbbtg65gibadeeo2awe3j7s6evg7eklserehqr4w4e2bis5tebid.onion/member.php?action=login')
+
+  

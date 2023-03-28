@@ -11,7 +11,7 @@ from tbselenium.tbdriver import TorBrowserDriver
 from databaseConnection import collection2
 from WordLists import wordList
 import calendar
-from Login import detect_login,login_button_detect
+from Login import detect_login,login_button_detect,login_fill
 # import undetected_chromedriver as uc
 from timestamp_convertor import date_coverter
 
@@ -87,12 +87,11 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
     with TorBrowserDriver(torPath) as driver:
         # driver.get(siteLink)
         # driver =uc.Chrome()
-        try:
-            driver.get(siteLink)
-            time.sleep(2)
-            detect_login(driver, siteLink)
-        except:
-            pass
+        
+        driver.get(siteLink)
+        time.sleep(8)
+        detect_login(driver, siteLink)
+
         allSectionLinks=[]
         for s in sectionPath:
             type,path = s
@@ -171,93 +170,99 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
                         time.sleep(1)
                 except:
                     break
-        # if len(threadLinks)==0:
-        #     # CurrUrl,driver =login_button_detect(driver,siteLink)
-        #     driver,currentUrl=detect_login(driver,siteLink)
-        #     time.sleep(1)
-        #     try:
-        #         driver.get(siteLink)
-        #         time.sleep(2)
-        #     except:
-        #         pass
-        #     allSectionLinks=[]
-        #     for s in sectionPath:
-        #         type,path = s
-        #         sections=driver.find_elements(selector(type),path)
-        #         try:
-        #             for section in sections:
-        #                 link=section.get_attribute('href')
-        #                 allSectionLinks.append(link)
-        #         except:
-        #             pass
-        #     Temp_threadLinks=[]
-        #     Temp_lastModDates=[]
+
+
+
+
+        if len(threadLinks)==0:
+            # CurrUrl,driver =login_button_detect(driver,siteLink)
+            url,driver2=login_button_detect(driver,siteLink)
+            # login_fill(driver)
+            # driver3,currentUrl=detect_login(driver,siteLink)
+            login_fill(driver)
+            time.sleep(2)
+
+            driver.get(siteLink)
+            time.sleep(2)
+
+            allSectionLinks=[]
+            for s in sectionPath:
+                type,path = s
+                sections=driver.find_elements(selector(type),path)
+                try:
+                    for section in sections:
+                        link=section.get_attribute('href')
+                        allSectionLinks.append(link)
+                except:
+                    pass
+            Temp_threadLinks=[]
+            Temp_lastModDates=[]
             
-        #     threadTitles=[]
-        #     threadLinks=[]
-        #     lastModDates=[]
+            threadTitles=[]
+            threadLinks=[]
+            lastModDates=[]
             
-        #     allData=[]
-        #     prev_url=None
-        #     for link in allSectionLinks:
+            allData=[]
+            prev_url=None
+            for link in allSectionLinks:
                 
-        #         try:
-        #             driver.get(link)
-        #             time.sleep(2)
-        #         except:
-        #             pass
-        #         while True:
+                try:
+                    driver.get(link)
+                    time.sleep(2)
+                except:
+                    pass
+                while True:
                     
-        #             type,path = lastModPath
-        #             lastMods=driver.find_elements(selector(type),path)
-        #             for lastMod in lastMods:
-        #                 try:
-        #                     lastModDate =lastMod.get_attribute('data-time')
-        #                     if lastModDate==None:
-        #                         element_html=lastMod.get_attribute('outerHTML')
-        #                         lastModDate=BeautifulSoup(element_html,'html.parser')
-        #                         lastModDate_text=lastModDate.text
-        #                         try:
-        #                             lastModDate=str(int(date_coverter(lastModDate_text)))
-        #                             if lastModDate=='None':
-        #                                 lastModDate=lastModDate_text
-        #                         except:
-        #                             lastModDate=lastModDate_text
+                    type,path = lastModPath
+                    lastMods=driver.find_elements(selector(type),path)
+                    for lastMod in lastMods:
+                        try:
+                            lastModDate =lastMod.get_attribute('data-time')
+                            if lastModDate==None:
+                                element_html=lastMod.get_attribute('outerHTML')
+                                lastModDate=BeautifulSoup(element_html,'html.parser')
+                                lastModDate_text=lastModDate.text
+                                try:
+                                    lastModDate=str(int(date_coverter(lastModDate_text)))
+                                    if lastModDate=='None':
+                                        lastModDate=lastModDate_text
+                                except:
+                                    lastModDate=lastModDate_text
                                 
-        #                     Temp_lastModDates.append(lastModDate)
-        #                 except:
-        #                     pass
+                            Temp_lastModDates.append(lastModDate)
+                        except:
+                            pass
                     
-        #             type,path = urlPath
-        #             urls=driver.find_elements(selector(type),path)
-        #             for u in urls:
-        #                 element_html=u.get_attribute('outerHTML')
-        #                 title=BeautifulSoup(element_html,'html.parser')
-        #                 title=title.text
-        #                 url=u.get_attribute('href')
-        #                 Temp_threadLinks.append(url)
-        #                 for word in wordList:
-        #                     if word.lower() in title.lower():
-        #                         url=u.get_attribute('href')
-        #                         threadTitles.append(title)
-        #                         threadLinks.append(url)
-        #                         tempIndex=Temp_threadLinks.index(url)
-        #                         lastModDates.append(Temp_lastModDates[tempIndex])
-        #                         break
-        #             try:
-        #                 check=press_next_btn(driver,path_of_next_btn)
-        #                 curr_url=check
-        #                 if curr_url==prev_url:
-        #                     break
-        #                 else:
-        #                     prev_url=curr_url
-        #                 if check==False:
-        #                     break
-        #                 else:
-        #                     driver.get(check)
-        #                     time.sleep(1)
-        #             except:
-        #                 break
+                    type,path = urlPath
+                    urls=driver.find_elements(selector(type),path)
+                    for u in urls:
+                        element_html=u.get_attribute('outerHTML')
+                        title=BeautifulSoup(element_html,'html.parser')
+                        title=title.text
+                        url=u.get_attribute('href')
+                        Temp_threadLinks.append(url)
+                        for word in wordList:
+                            if word.lower() in title.lower():
+                                url=u.get_attribute('href')
+                                threadTitles.append(title)
+                                threadLinks.append(url)
+                                tempIndex=Temp_threadLinks.index(url)
+                                lastModDates.append(Temp_lastModDates[tempIndex])
+                                break
+                    try:
+                        check=press_next_btn(driver,path_of_next_btn)
+                        curr_url=check
+                        if curr_url==prev_url:
+                            break
+                        else:
+                            prev_url=curr_url
+                        if check==False:
+                            break
+                        else:
+                            driver.get(check)
+                            time.sleep(1)
+                    except:
+                        break
 
         for _ in range(min(len(threadLinks),len(lastModDates))):
             dct={'title':threadTitles[_],'url':threadLinks[_],'lastModDate':lastModDates[_],'isUrgent':False,'status':None,"failedCount":0,'time':datetime.now()}

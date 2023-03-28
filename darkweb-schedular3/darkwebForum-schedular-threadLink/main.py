@@ -32,7 +32,7 @@ def fetchingLinks():
                     {"status": {"$ne": "running"}, "time": {"$lte": d}}, {})
                 getfunction(urlList[0])
             else:
-                print("Every url Scrapped!!")
+                print("Every forums Scrapped!!")
 
     else:
         print("Node is Busy!!")

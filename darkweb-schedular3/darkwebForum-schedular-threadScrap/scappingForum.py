@@ -11,7 +11,7 @@ import time
 import calendar
 import undetected_chromedriver as uc
 
-from Login import detect_login
+from Login import login_button_detect,login_fill,detect_login
 from driverpath import torPath
 from databaseConnection import *
 from timestamp_convertor import date_coverter
@@ -136,7 +136,13 @@ def forum_scrap(threadUrls,lastModDate):
                 scrapRunning(url)
                 driver.get(url)
                 time.sleep(1)
-                detect_login(driver,url)
+                check=detect_login(driver,url)
+                if check!=True:
+                    login_button_detect(driver,url)
+                    login_fill(driver)
+                driver.get(url)
+                time.sleep(1)
+
                 
             except:
                 scrapFailed(url,int(failedCount)) 

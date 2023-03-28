@@ -36,10 +36,12 @@ def detect_login(driver,url):
             print("login page")
             if x=="true":
                 driver,url = login_fill(driver)
+                print('*'*100)
                 # login_button_detect(driver,url)      
-        else:
-            login_button_detect(driver,url)
-            login_fill(driver)
+        # else:
+        #     print('-'*100)
+        #     url,driver=login_button_detect(driver,url)
+        #     login_fill(driver)
 
                         
 
@@ -57,7 +59,7 @@ def login_fill(driver):
 
         if((f.get_attribute('method').lower()=='post')):
             domain=currentUrl.split('.')[0]
-            print(domain)
+            # print(domain)
             loginData=login_credential.find_one({'site':{'$regex':domain}})
             try:
                 loginId=loginData['loginId']
@@ -166,8 +168,8 @@ def login_button_detect(driver,url):
                     
     return currentUrl,driver
     
-with TorBrowserDriver("/home/rohan/Downloads/tor-browser-linux64-12.0.1_ALL/tor-browser") as driver:
-    driver.get('http://cryptbbtg65gibadeeo2awe3j7s6evg7eklserehqr4w4e2bis5tebid.onion/member.php?action=login') 
-    detect_login(driver,'http://cryptbbtg65gibadeeo2awe3j7s6evg7eklserehqr4w4e2bis5tebid.onion/member.php?action=login')
+# with TorBrowserDriver("/home/rohan/Downloads/tor-browser-linux64-12.0.1_ALL/tor-browser") as driver:
+#     driver.get('http://cryptbbtg65gibadeeo2awe3j7s6evg7eklserehqr4w4e2bis5tebid.onion/member.php?action=login') 
+#     detect_login(driver,'http://cryptbbtg65gibadeeo2awe3j7s6evg7eklserehqr4w4e2bis5tebid.onion/member.php?action=login')
 
   
