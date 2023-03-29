@@ -2,10 +2,11 @@ from databaseConnection import collection1
 from mainScrapping import getfunction
 from datetime import date, datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-# from flag import sendLog,sendData
+from flag import sendLog,sendData
 from flag import isNodeBusy
 from app import app
 import time
+
 # from flask import Flask, jsonify, request
 # from flask_cors import CORS
 # from flask_socketio import SocketIO
@@ -18,10 +19,9 @@ def fetchingLinks():
     if (isNodeBusy != True):
         time.sleep(5)
         if collection1.count_documents({'isUrgent': True}) > 0:
-            print(
-                f"No of urgent websites :{collection1.count_documents({'isUrgent':True})}")
-            urgent = collection1.find(
-                {"isUrgent": True, "status": {"$ne": "running"}}, {})
+            print(f"No of urgent websites :{collection1.count_documents({'isUrgent':True})}")
+            # sendLog(f"No of urgent websites :{collection1.count_documents({'isUrgent':True})}")
+            urgent = collection1.find({"isUrgent": True, "status": {"$ne": "running"}}, {})
             getfunction(urgent[0])
         else:
             d = datetime.today() - timedelta(hours=0, minutes=30)
@@ -33,9 +33,11 @@ def fetchingLinks():
                 getfunction(urlList[0])
             else:
                 print("Every forums Scrapped!!")
+                # sendLog("Every forums Scrapped!!")
 
     else:
         print("Node is Busy!!")
+        # sendLog("Node is Busy!!")
 
 
 @app.route('/')

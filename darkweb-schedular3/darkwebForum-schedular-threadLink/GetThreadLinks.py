@@ -14,7 +14,8 @@ import calendar
 from Login import detect_login,login_button_detect,login_fill
 # import undetected_chromedriver as uc
 from timestamp_convertor import date_coverter
-
+from flag import sendLog,sendData
+from startDisplay import *
         
 def addingToDB(allData):
     for data in allData:
@@ -28,9 +29,14 @@ def addingToDB(allData):
                 q={'_id':id}
                 collection2.delete_one(q)
                 collection2.insert_one(data)
-                print('updated')
+                print('DataBase Updated!!')
+                # sendLog('DataBase Updated!!')
         else:
             collection2.insert_one(data)
+            print("Adding New Data...")
+            # sendLog("Adding New Data...")
+            print("DataBase Updated!!")
+            # sendLog("DataBase Updated!!")
 
 def press_next_btn(driver,path_of_next_btn) :
     try :
@@ -61,6 +67,7 @@ def selector(type):
         return By.TAG_NAME
     else:
         print('Wrong path_type')
+        # sendLog('Wrong path_type')
      
 # functions for dataTime--------------------
 
@@ -84,6 +91,8 @@ def clndate(date,date_formats):
 
 
 def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
+
+    # xvfb_display = start_xvfb()
     with TorBrowserDriver(torPath) as driver:
         # driver.get(siteLink)
         # driver =uc.Chrome()
@@ -175,13 +184,9 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
 
 
         if len(threadLinks)==0:
-            # CurrUrl,driver =login_button_detect(driver,siteLink)
             url,driver2=login_button_detect(driver,siteLink)
-            # login_fill(driver)
-            # driver3,currentUrl=detect_login(driver,siteLink)
             login_fill(driver)
             time.sleep(2)
-
             driver.get(siteLink)
             time.sleep(2)
 
@@ -267,9 +272,10 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
         for _ in range(min(len(threadLinks),len(lastModDates))):
             dct={'title':threadTitles[_],'url':threadLinks[_],'lastModDate':lastModDates[_],'isUrgent':False,'status':None,"failedCount":0,'time':datetime.now()}
             print(dct)
+            # sendData(dct)
             allData.append(dct)
         addingToDB(allData)
-
+    # stop_xvfb(xvfb_display)
 
 
 

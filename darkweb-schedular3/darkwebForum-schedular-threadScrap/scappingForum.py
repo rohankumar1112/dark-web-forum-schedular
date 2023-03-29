@@ -9,12 +9,12 @@ import pymongo
 from statusHandler import *
 import time
 import calendar
-import undetected_chromedriver as uc
-
+# import undetected_chromedriver as uc
 from Login import login_button_detect,login_fill,detect_login
 from driverpath import torPath
 from databaseConnection import *
 from timestamp_convertor import date_coverter
+from startDisplay import *
 
 def addToDb(scraped_doc):
     url = scraped_doc['url']
@@ -52,10 +52,15 @@ def addToDb(scraped_doc):
             q={'_id':id}
             update = {"$set": {"posts": new_posts,'date_failed_count':int(date_failed_count)+1}}
             collection3.update_one(q,update)
+            print("DataBase Updated!!")
+            # sendLog("DataBase Updated!!")
     else :
         collection3.insert_one(scraped_doc)
-
-        
+        print("Adding New Data to DataBase")
+        # sendLog("Adding New Data to DataBase")
+        print("DataBase Updated!!")
+        # sendLog("DataBase Updated!!")
+      
 def press_next_btn(driver,path_of_next_btn) :
     try :
         type,path = path_of_next_btn
@@ -72,7 +77,6 @@ def press_next_btn(driver,path_of_next_btn) :
     except ElementNotInteractableException:
         return False
     
-
 def selector(type):
     if type!=None:
         if type=='XPATH':
@@ -87,10 +91,9 @@ def selector(type):
             return By.TAG_NAME
         else:
             print('Wrong path_type')
-        
+            # sendLog('Wrong path_type')    
         
 # functions for dataTime--------------------
-
 
 def forum_scrap(threadUrls,lastModDate):
     isNodeBusy =True
@@ -104,18 +107,17 @@ def forum_scrap(threadUrls,lastModDate):
     path_of_next_btn =None
     expand_btn =None
     failedCount =0 
-    
-        # driver = uc.Chrome()
+
+    # xvfb_display = start_xvfb()
     with TorBrowserDriver(torPath) as driver:
-    
         for p in range(min(len(threadUrls),len(lastModDate))):
-            
             url=threadUrls[p]
             failedCount=collection2.find_one({'url':url})['failedCount']  
             domain= url.split('.')[0]
             dataByDomain=collection1.find_one({'site':{'$regex':domain}})
             if dataByDomain==None:
                 print('Path not found for this site.')
+                # sendLog('Path not found for this site.')
                 scrapFailed(url,int(failedCount))
                 continue 
             else:
@@ -131,8 +133,9 @@ def forum_scrap(threadUrls,lastModDate):
                 failedCount =dataByDomain['failedCount']
 
             try:
-                print(url,"is Scrapping now...")
-                # sendLog(url,"is Scrapping now...")
+                print(f"{url} is Scrapping now...")
+                # sendLog(f"{url} is Scrapping now...")
+            
                 scrapRunning(url)
                 driver.get(url)
                 time.sleep(1)
@@ -146,10 +149,11 @@ def forum_scrap(threadUrls,lastModDate):
                 
             except:
                 scrapFailed(url,int(failedCount)) 
-                print("not Scrapped!!---->",url)
-                # sendLog("not Scrapped!!---->",url) #test 3
-                print("FailedCount is:",str(int(failedCount)+1))
-                # sendLog("FailedCount is:",str(failedCount+1))  #test 2
+                print(f"Not Scrapped!!----> {url}")
+                # sendLog(f"Not Scrapped!!----> {url}")
+                print(f"FailedCount is: {str(int(failedCount)+1)}")
+                # sendLog(f"FailedCount is: {str(int(failedCount)+1)}")
+    
                 isNodeBusy =False
                 
             try:      
@@ -285,14 +289,18 @@ def forum_scrap(threadUrls,lastModDate):
                     scrapSuccess(url)
                     dct={'title':title,'url':threadUrls[p],'posts':allPosts,'lastModifiedDate':lastModDate[p],'date_failed_count':0,'scrappedAt':int(datetime.now().timestamp())}
                     print(dct)
+                    # sendData(dct)
                     print(url," Scrapping Done!!")
-                    # # sendLog(url," Scrapping Done!!")
+                    # sendLog(f"{url} Scrapping Done!!")
                     isNodeBusy =False
                     addToDb(dct)
+                    
             else:
                 scrapFailed(url,int(failedCount)) 
                 print("not Scrapped!!---->",url)
-                # sendLog("not Scrapped!!---->",url) #test 3
+                # sendLog(f"not Scrapped!!----> {url}") #test 3
                 print("FailedCount is:",str(int(failedCount)+1))
-                # sendLog("FailedCount is:",str(failedCount+1))  #test 2
-                isNodeBusy =False       
+                # sendLog(f"FailedCount is: {str(failedCount+1)}")  #test 2
+                isNodeBusy =False  
+                driver.close()
+    # stop_xvfb(xvfb_display)         

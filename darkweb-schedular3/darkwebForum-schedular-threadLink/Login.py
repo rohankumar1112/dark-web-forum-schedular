@@ -1,4 +1,3 @@
-
 import time
 from selenium import webdriver
 from tbselenium.tbdriver import TorBrowserDriver
@@ -8,6 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 import time
 from databaseConnection import login_credential
+from flag import sendLog,sendData
 
 def is_continuous(arr, sub_arr):
     n = len(sub_arr)
@@ -34,16 +34,10 @@ def detect_login(driver,url):
         if is_continuous(List_char_Title,word_list ):
             x="true"
             print("login page")
+            sendLog("login page")
             if x=="true":
                 driver,url = login_fill(driver)
                 print('*'*100)
-                # login_button_detect(driver,url)      
-        # else:
-        #     print('-'*100)
-        #     url,driver=login_button_detect(driver,url)
-        #     login_fill(driver)
-
-                        
 
 def login_fill(driver):
     time.sleep(2)
@@ -66,6 +60,7 @@ def login_fill(driver):
                 password=loginData['password']
             except:
                 print('Id and Password not exixt for this site in database.')
+                sendLog('Id and Password not exixt for this site in database.')
                 loginId=None
                 password=None
             try:    
@@ -134,7 +129,6 @@ def login_fill(driver):
 def login_button_detect(driver,url):
     login_button_texts = ['LOGIN','LOG IN','LogIn','Log In','Login','Log in','login','log in','SIGNIN','SIGN IN','SignIn','Sign In','Signin','Sign in','signin','sign in','Login or Sign Up']
 
-    # for url in urls :
     currentUrl=driver.current_url
     if currentUrl!=url:
         driver.get(url)

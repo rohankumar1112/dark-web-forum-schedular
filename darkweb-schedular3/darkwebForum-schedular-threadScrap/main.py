@@ -2,7 +2,7 @@ from databaseConnection import collection2
 from mainScrapping import getfunction
 from datetime import date,datetime,timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-# from flag import sendLog,sendData
+from flag import sendLog,sendData
 from flag import isNodeBusy
 from app import app
 import time
@@ -18,21 +18,23 @@ def scrapping():
         time.sleep(5)
         if collection2.count_documents({'isUrgent':True})>0:
                 print(f"No of urgent websites :{collection2.count_documents({'isUrgent':True})}")
+                # sendLog(f"No of urgent websites :{collection2.count_documents({'isUrgent':True})}")
                 urgent=collection2.find({"isUrgent":True,"status":{"$ne":"running"}},{})
                 time.sleep(1)
-                getfunction(urgent) 
-
-     
+                getfunction(urgent)     
         else:
             d = datetime.today() - timedelta(hours=0, minutes=1)
             if collection2.count_documents({"status":{"$ne":"running"},"time":{"$lte":d}})>0:
                 print(f"No of websites whose status not running: {collection2.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
+                # sendLog(f"No of websites whose status not running: {collection2.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
                 urlList =collection2.find({"status":{"$ne":"running"},"time":{"$lte":d}},{})
                 getfunction(urlList)    
             else:
                 print("Every url Scrapped!!")   
+                # sendLog("Every url Scrapped!!")   
     else:
         print("Node is Busy!!")        
+        # sendLog("Node is Busy!!")        
         
 @app.route('/')
 def hello_world():

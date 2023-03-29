@@ -1,7 +1,7 @@
 from statusHandler import scrapRunning,scrapFailed,scrapSuccess
 from databaseConnection import *
 from flag import isNodeBusy
-# from flag import sendLog
+from flag import sendLog
 from GetThreadLinks import getThreadLinks
 
 # Scrapping...
