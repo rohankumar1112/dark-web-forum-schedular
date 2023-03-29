@@ -9,11 +9,13 @@ def getfunction(data):
         Urls =[]
         Lastmods =[]
         for x in data:
-                Urls.append(x['url'])
-                Lastmods.append(x['lastModDate'])                  
-        print(list(set(Urls)))
+                url=x['url']
+                if url not in Urls:
+                        Urls.append(url)
+                        Lastmods.append(x['lastModDate'])                  
+        print(Urls)
         try:
-                forum_scrap(list(set(Urls)),list(set(Lastmods)))
+                forum_scrap(Urls,Lastmods)
         except:
                pass
                 
