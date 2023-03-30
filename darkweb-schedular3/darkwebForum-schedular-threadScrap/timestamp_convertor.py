@@ -11,7 +11,7 @@ def clndate(date,date_formats):
 
                 new_format="%Y-%m-%d %H:%M:%S"
                 new_date_string = date_object.strftime(new_format)
-                print(new_date_string)   # to remove date
+                # print(new_date_string)   # to remove date
                 return new_date_string
             except:
                 pass

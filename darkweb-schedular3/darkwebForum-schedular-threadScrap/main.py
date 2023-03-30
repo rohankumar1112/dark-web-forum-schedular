@@ -14,6 +14,7 @@ import time
 
 def scrapping():
     print(datetime.now())
+    # sendLog(datetime.now())
     if (isNodeBusy!=True):
         time.sleep(5)
         if collection2.count_documents({'isUrgent':True})>0:

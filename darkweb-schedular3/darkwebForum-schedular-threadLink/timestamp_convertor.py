@@ -11,7 +11,7 @@ def clndate(date,date_formats):
 
                 new_format="%Y-%m-%d %H:%M:%S"
                 new_date_string = date_object.strftime(new_format)
-                print(new_date_string)   # to remove date
+                # print(new_date_string)   # to remove date
                 return new_date_string
             except:
                 pass
@@ -418,6 +418,6 @@ def date_coverter(input_date):
         else:    
             output = date_formating(input_date)
             dt = datetime.strptime(output, "%Y-%m-%d %H:%M:%S")
-            print(dt)
+            # print(dt)
             timestamp = int(dt.timestamp())
             return timestamp

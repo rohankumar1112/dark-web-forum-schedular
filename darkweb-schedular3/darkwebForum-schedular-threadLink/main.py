@@ -16,6 +16,8 @@ import time
 
 def fetchingLinks():
     print(datetime.now())
+    # sendLog(datetime.now())
+    
     if (isNodeBusy != True):
         time.sleep(5)
         if collection1.count_documents({'isUrgent': True}) > 0:
@@ -26,8 +28,8 @@ def fetchingLinks():
         else:
             d = datetime.today() - timedelta(hours=0, minutes=30)
             if collection1.count_documents({"status": {"$ne": "running"}, "time": {"$lte": d}}) > 0:
-                print(
-                    f"No of websites whose status not running: {collection1.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
+                print(f"No of websites whose status not running: {collection1.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
+                # sendLog(f"No of websites whose status not running: {collection1.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
                 urlList = collection1.find(
                     {"status": {"$ne": "running"}, "time": {"$lte": d}}, {})
                 getfunction(urlList[0])

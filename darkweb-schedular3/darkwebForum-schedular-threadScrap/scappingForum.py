@@ -41,6 +41,7 @@ def addToDb(scraped_doc):
                     if post_date==None:
                         new_format=post['date']
                         print('new date format detected. New format------->',new_format)  
+                        # sendLog(f"new date format detected. New format------->{new_format}")  
                     if post_date > db_date:
                         db_posts.append(post)
                 except:
@@ -49,6 +50,7 @@ def addToDb(scraped_doc):
             update = {"$set": {"posts": db_posts,'date_failed_count':0}}
             collection3.update_one(q,update)
             print("DataBase Updated!!")
+            # sendLog("DataBase Updated!!")
         except:
             q={'_id':id}
             update = {"$set": {"posts": new_posts,'date_failed_count':int(date_failed_count)+1}}
@@ -58,7 +60,7 @@ def addToDb(scraped_doc):
     else :
         collection3.insert_one(scraped_doc)
         print("Added New Data in DataBase.")
-        # sendLog("Adding New Data to DataBase")
+        # sendLog("Added New Data in DataBase.")
         # print("DataBase Updated!!")
         # sendLog("DataBase Updated!!")
       
@@ -156,11 +158,9 @@ def forum_scrap(threadUrls,lastModDate):
                 print(f"Not Scrapped!!----> {url}")
                 # sendLog(f"Not Scrapped!!----> {url}")
                 print(f"FailedCount is: {str(int(failedCount)+1)}")
-                continue
                 # sendLog(f"FailedCount is: {str(int(failedCount)+1)}")
-    
+                continue
                 # isNodeBusy =False
-                
             try:      
                 type,path =title_path
                 title=driver.find_element(selector(type),str(path))
@@ -173,8 +173,6 @@ def forum_scrap(threadUrls,lastModDate):
             allPosts=[]
             prev_url=None
             if title  !='not found':
-                
-            
                 while True:
                     type,path = iterator_path
                     iterator=driver.find_elements(selector(type),path)
