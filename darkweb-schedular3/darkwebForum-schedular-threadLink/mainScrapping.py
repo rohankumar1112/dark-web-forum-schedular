@@ -28,7 +28,7 @@ def getfunction(data):
                         print("not Scrapped!!---->",site)
                         # sendLog("not Scrapped!!---->",site) #test 3
                         print("FailedCount is:",str(failedCount+1))
-                        # sendLog("FailedCount is:",str(failedCount+1))  #test 2
+                        # sendLog("FailedCount is:",str(failedCount+1))  
                         scrapFailed(site,failedCount) 
                         isNodeBusy =False
                 else:
@@ -38,9 +38,9 @@ def getfunction(data):
                         isNodeBusy =False
         except:
                 print("not Scrapped!!---->",site)
-                # sendLog("not Scrapped!!---->",site) #test 3
+                # sendLog("not Scrapped!!----> {site}") 
                 print("FailedCount is:",str(failedCount+1))
-                # sendLog("FailedCount is:",str(failedCount+1))  #test 2
+                # sendLog("FailedCount is: {str(failedCount+1)}")  
                 scrapFailed(site,failedCount) 
                 isNodeBusy =False
                 

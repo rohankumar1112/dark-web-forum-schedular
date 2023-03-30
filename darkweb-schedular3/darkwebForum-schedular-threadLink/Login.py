@@ -21,7 +21,6 @@ def detect_login(driver,url):
 
     time.sleep(2)
     my_title = driver.title
-    # print(my_title)
     LOwer_Title=my_title.lower()
     List_char_Title=list(LOwer_Title)
     WOrd_list=["log","sign","to be come"]
@@ -37,7 +36,7 @@ def detect_login(driver,url):
             # sendLog("login page")
             if x=="true":
                 driver,url = login_fill(driver)
-                print('*'*100)
+                # print('*'*100)
 
 def login_fill(driver):
     time.sleep(2)

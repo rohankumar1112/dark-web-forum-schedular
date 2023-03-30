@@ -71,7 +71,7 @@ def selector(type):
      
 def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
 
-    # xvfb_display = start_xvfb()
+    xvfb_display = start_xvfb()
     with TorBrowserDriver(torPath) as driver:
         # driver.get(siteLink)
         # driver =uc.Chrome()
@@ -256,7 +256,7 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
             # sendData(dct)
             allData.append(dct)
         addingToDB(allData)
-    # stop_xvfb(xvfb_display)
+    stop_xvfb(xvfb_display)
 
 
 

@@ -47,7 +47,7 @@ sched.start()
 # main flask function
 if __name__ == '__main__':
     # socketio.run(app, debug=True)
-    app.run(port =5005)
+    app.run(port =6500)
     
     
 # Scheduler..

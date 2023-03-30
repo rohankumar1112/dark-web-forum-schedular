@@ -22,11 +22,9 @@ def fetchingLinks():
     else:
         d = datetime.today() - timedelta(hours=0, minutes=30)
         if collection1.count_documents({"status": {"$ne": "running"}, "time": {"$lte": d}}) > 0:
-            print("xx")
             print(f"No of websites whose status not running: {collection1.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
             # sendLog(f"No of websites whose status not running: {collection1.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
-            urlList = collection1.find(
-                {"status": {"$ne": "running"}, "time": {"$lte": d}}, {})
+            urlList = collection1.find({"status": {"$ne": "running"}, "time": {"$lte": d}}, {})
             getfunction(urlList[0])
         else:
             print("Every forums Scrapped!!")
@@ -46,7 +44,7 @@ sched.start()
 # main flask function
 if __name__ == '__main__':
     # socketio.run(app, debug=True)
-    app.run(port =6000,debug=False)
+    app.run(debug=False)
     # sched = BackgroundScheduler(daemon=True)
     # sched.add_job(fetchingLinks, 'interval', minutes=1)
     # sched.start()

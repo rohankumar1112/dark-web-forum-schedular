@@ -111,7 +111,7 @@ def forum_scrap(threadUrls,lastModDate):
     expand_btn =None
     failedCount =0 
 
-    # xvfb_display = start_xvfb()
+    xvfb_display = start_xvfb()
     with TorBrowserDriver(torPath) as driver:
         for p in range(min(len(threadUrls),len(lastModDate))):
             url=threadUrls[p]
@@ -308,4 +308,4 @@ def forum_scrap(threadUrls,lastModDate):
                 # isNodeBusy =False 
                 continue
     isNodeBusy =False 
-    # stop_xvfb(xvfb_display)         
+    stop_xvfb(xvfb_display)         
