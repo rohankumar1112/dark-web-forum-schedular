@@ -10,7 +10,6 @@ collection1 =db['Xpath_forum']
 print ("Total Forums we have:", collection1.count_documents( {} ))
 # sendLog(f"Total Forums we have: {collection1.count_documents( {} )})
 
-
 # link dump collection
 collection2 =db['forum_Links']
 

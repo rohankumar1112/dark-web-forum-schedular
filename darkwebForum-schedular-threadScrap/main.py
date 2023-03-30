@@ -14,6 +14,7 @@ import time
 
 def scrapping():
     print(datetime.now())
+    # sendLog(datetime.now())
     if (isNodeBusy!=True):
         time.sleep(5)
         if collection2.count_documents({'isUrgent':True})>0:
@@ -23,7 +24,7 @@ def scrapping():
                 time.sleep(1)
                 getfunction(urgent)     
         else:
-            d = datetime.today() - timedelta(hours=0, minutes=1)
+            d = datetime.today() - timedelta(hours=0, minutes=5)
             if collection2.count_documents({"status":{"$ne":"running"},"time":{"$lte":d}})>0:
                 print(f"No of websites whose status not running: {collection2.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
                 # sendLog(f"No of websites whose status not running: {collection2.count_documents({'status':{'$ne':'running'},'time':{'$lte':d}})}")
@@ -35,7 +36,7 @@ def scrapping():
     else:
         print("Node is Busy!!")        
         # sendLog("Node is Busy!!")        
-        
+
 @app.route('/')
 def hello_world():
 	return 'Hello Darkweb!!'  

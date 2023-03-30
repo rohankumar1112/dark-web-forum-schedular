@@ -34,7 +34,7 @@ def detect_login(driver,url):
         if is_continuous(List_char_Title,word_list ):
             x="true"
             print("login page")
-            sendLog("login page")
+            # sendLog("login page")
             if x=="true":
                 driver,url = login_fill(driver)
                 print('*'*100)
@@ -60,7 +60,7 @@ def login_fill(driver):
                 password=loginData['password']
             except:
                 print('Id and Password not exixt for this site in database.')
-                sendLog('Id and Password not exixt for this site in database.')
+                # sendLog('Id and Password not exixt for this site in database.')
                 loginId=None
                 password=None
             try:    

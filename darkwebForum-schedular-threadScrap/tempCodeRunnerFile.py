@@ -1,0 +1,1 @@
+from flag import sendLog,sendData

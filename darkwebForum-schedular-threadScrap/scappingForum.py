@@ -41,6 +41,7 @@ def addToDb(scraped_doc):
                     if post_date==None:
                         new_format=post['date']
                         print('new date format detected. New format------->',new_format)  
+                        # sendLog(f"new date format detected. New format------->{new_format}")  
                     if post_date > db_date:
                         db_posts.append(post)
                 except:
@@ -48,6 +49,8 @@ def addToDb(scraped_doc):
             q={'_id':id}
             update = {"$set": {"posts": db_posts,'date_failed_count':0}}
             collection3.update_one(q,update)
+            print("DataBase Updated!!")
+            # sendLog("DataBase Updated!!")
         except:
             q={'_id':id}
             update = {"$set": {"posts": new_posts,'date_failed_count':int(date_failed_count)+1}}
@@ -56,9 +59,9 @@ def addToDb(scraped_doc):
             # sendLog("DataBase Updated!!")
     else :
         collection3.insert_one(scraped_doc)
-        print("Adding New Data to DataBase")
-        # sendLog("Adding New Data to DataBase")
-        print("DataBase Updated!!")
+        print("Added New Data in DataBase.")
+        # sendLog("Added New Data in DataBase.")
+        # print("DataBase Updated!!")
         # sendLog("DataBase Updated!!")
       
 def press_next_btn(driver,path_of_next_btn) :
@@ -139,12 +142,15 @@ def forum_scrap(threadUrls,lastModDate):
                 scrapRunning(url)
                 driver.get(url)
                 time.sleep(1)
-                check=detect_login(driver,url)
-                if check!=True:
-                    login_button_detect(driver,url)
-                    login_fill(driver)
-                driver.get(url)
-                time.sleep(1)
+                try:
+                    check=detect_login(driver,url)
+                    if check!=True:
+                        login_button_detect(driver,url)
+                        login_fill(driver)
+                    driver.get(url)
+                    time.sleep(1)
+                except:
+                    pass
 
                 
             except:
@@ -153,9 +159,8 @@ def forum_scrap(threadUrls,lastModDate):
                 # sendLog(f"Not Scrapped!!----> {url}")
                 print(f"FailedCount is: {str(int(failedCount)+1)}")
                 # sendLog(f"FailedCount is: {str(int(failedCount)+1)}")
-    
-                isNodeBusy =False
-                
+                continue
+                # isNodeBusy =False
             try:      
                 type,path =title_path
                 title=driver.find_element(selector(type),str(path))
@@ -168,8 +173,6 @@ def forum_scrap(threadUrls,lastModDate):
             allPosts=[]
             prev_url=None
             if title  !='not found':
-                
-            
                 while True:
                     type,path = iterator_path
                     iterator=driver.find_elements(selector(type),path)
@@ -292,8 +295,8 @@ def forum_scrap(threadUrls,lastModDate):
                     # sendData(dct)
                     print(url," Scrapping Done!!")
                     # sendLog(f"{url} Scrapping Done!!")
-                    isNodeBusy =False
                     addToDb(dct)
+                    # isNodeBusy =False
                     
             else:
                 scrapFailed(url,int(failedCount)) 
@@ -301,6 +304,8 @@ def forum_scrap(threadUrls,lastModDate):
                 # sendLog(f"not Scrapped!!----> {url}") #test 3
                 print("FailedCount is:",str(int(failedCount)+1))
                 # sendLog(f"FailedCount is: {str(failedCount+1)}")  #test 2
-                isNodeBusy =False  
-                driver.close()
+                # driver.close()
+                # isNodeBusy =False 
+                continue
+    isNodeBusy =False 
     # stop_xvfb(xvfb_display)         
