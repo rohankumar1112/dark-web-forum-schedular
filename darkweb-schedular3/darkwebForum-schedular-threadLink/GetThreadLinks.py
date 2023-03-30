@@ -69,27 +69,6 @@ def selector(type):
         print('Wrong path_type')
         # sendLog('Wrong path_type')
      
-# functions for dataTime--------------------
-
-def clndate(date,date_formats):
-    try:
-        
-        result = re.search(r"^[A-Za-z]+\s\d{1,2},\s\d{4},\s\d{2}:\d{2}\s[A-Z]{2}", date).group()
-        for date_format in date_formats:
-            try:
-                date_object = datetime.strptime(result, date_format)
-                # new_format = "%d-%m-%Y"
-                new_format="%Y-%m-%d %H:%M:%S"
-                new_date_string = date_object.strftime(new_format)
-                # print(new_date_string)
-                return new_date_string
-            except:
-                pass
-
-    except:
-        pass
-
-
 def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
 
     # xvfb_display = start_xvfb()

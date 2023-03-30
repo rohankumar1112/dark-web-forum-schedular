@@ -59,8 +59,10 @@ def login_fill(driver):
                 loginId=loginData['loginId']
                 password=loginData['password']
             except:
-                print('Id and Password not exixt for this site in database.')
+                print('Id and Password not exist for this site in database.')
                 # sendLog('Id and Password not exixt for this site in database.')
+                print('Fetching without Login...')
+                # sendLog('Fetching without Login...')
                 loginId=None
                 password=None
             try:    

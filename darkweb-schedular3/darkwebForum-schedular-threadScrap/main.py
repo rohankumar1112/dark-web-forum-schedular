@@ -6,11 +6,9 @@ from flag import sendLog,sendData
 from flag import isNodeBusy
 from app import app
 import time
-# from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request
 # from flask_cors import CORS
 # from flask_socketio import SocketIO
-
-# Flask...
 
 def scrapping():
     print(datetime.now())
@@ -35,20 +33,24 @@ def scrapping():
                 # sendLog("Every url Scrapped!!")   
     else:
         print("Node is Busy!!")        
-        # sendLog("Node is Busy!!")        
+        # sendLog("Node is Busy!!")  
 
+
+# scrapping()
 @app.route('/')
 def hello_world():
-	return 'Hello Darkweb!!'  
+    return 'Hello Darkweb-Forum!!'
 
-scrapping()
-
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(scrapping, 'interval', minutes=1)
+sched.start()
 # main flask function
 if __name__ == '__main__':
     # socketio.run(app, debug=True)
-    app.run(debug=True)
-
+    app.run(port =5005)
+    
+    
 # Scheduler..
-sched = BackgroundScheduler(daemon=True)
-sched.add_job(scrapping,'interval',minutes=1)
-sched.start()
+# sched = BackgroundScheduler(daemon=True)
+# sched.add_job(fetchingLinks, 'interval', minutes=1)
+# sched.start()
