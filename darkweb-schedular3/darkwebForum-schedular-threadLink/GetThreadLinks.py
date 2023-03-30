@@ -247,7 +247,9 @@ def getThreadLinks(siteLink,sectionPath,urlPath,lastModPath,path_of_next_btn):
                             time.sleep(1)
                     except:
                         break
-
+        if len(threadLinks)==0:
+            print('login or captcha |or Can not find links with matching word list!!')
+            return False
         for _ in range(min(len(threadLinks),len(lastModDates))):
             dct={'title':threadTitles[_],'url':threadLinks[_],'lastModDate':lastModDates[_],'isUrgent':False,'status':None,"failedCount":0,'time':datetime.now()}
             print(dct)

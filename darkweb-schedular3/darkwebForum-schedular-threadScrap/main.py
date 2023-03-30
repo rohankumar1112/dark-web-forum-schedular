@@ -36,7 +36,7 @@ def scrapping():
         # sendLog("Node is Busy!!")  
 
 
-# scrapping()
+scrapping()
 @app.route('/')
 def hello_world():
     return 'Hello Darkweb-Forum!!'

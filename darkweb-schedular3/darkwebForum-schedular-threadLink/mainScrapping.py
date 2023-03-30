@@ -23,11 +23,19 @@ def getfunction(data):
                 print(site,"is Scrapping now...")
                 # sendLog(site,"is Scrapping now...")
                 scrapRunning(site)
-                getThreadLinks(site,sectionPath,urlPath,lastModPath,path_of_sectionNext_btn)
-                scrapSuccess(site)
-                print(site," Scrapping Done!!")
-                # sendLog(site," Scrapping Done!!")
-                isNodeBusy =False
+                check=getThreadLinks(site,sectionPath,urlPath,lastModPath,path_of_sectionNext_btn)
+                if check==False:
+                        print("not Scrapped!!---->",site)
+                        # sendLog("not Scrapped!!---->",site) #test 3
+                        print("FailedCount is:",str(failedCount+1))
+                        # sendLog("FailedCount is:",str(failedCount+1))  #test 2
+                        scrapFailed(site,failedCount) 
+                        isNodeBusy =False
+                else:
+                        scrapSuccess(site)
+                        print(site," Scrapping Done!!")
+                        # sendLog(site," Scrapping Done!!")
+                        isNodeBusy =False
         except:
                 print("not Scrapped!!---->",site)
                 # sendLog("not Scrapped!!---->",site) #test 3
