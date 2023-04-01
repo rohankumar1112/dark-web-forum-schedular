@@ -7,8 +7,7 @@ def clndate(date,date_formats):
         result = re.search(r"^[A-Za-z]+\s\d{1,2},\s\d{4},\s\d{2}:\d{2}\s[A-Z]{2}", date).group()
         for date_format in date_formats:
             try:
-                date_object = datetime.strptime(result, date_format)
-
+                date_object = datetime.strptime(result, date_format)    
                 new_format="%Y-%m-%d %H:%M:%S"
                 new_date_string = date_object.strftime(new_format)
                 # print(new_date_string)   # to remove date
@@ -46,6 +45,21 @@ def date_formating(date_string):
                     raise ValueError("Invalid date string format")
                 now = datetime.now()
                 date_object = now - timedelta(days=day)
+
+                new_format="%Y-%m-%d %H:%M:%S"
+                new_date_string = date_object.strftime(new_format)
+                return new_date_string
+            except:
+                pass
+            # Today
+            try:      
+                match = re.search("(\d+) today", date_string) or re.search("(\d+) Today", date_string) or re.search("(\d+) tod", date_string) or re.search("(\d+) Tod", date_string) or re.search("today", date_string) or re.search("Tod", date_string)or re.search("TOD", date_string)or re.search("tod", date_string)
+                if match:
+                    day = 1
+                else:
+                    raise ValueError("Invalid date string format")
+                now = datetime.now()
+                date_object = now
 
                 new_format="%Y-%m-%d %H:%M:%S"
                 new_date_string = date_object.strftime(new_format)
@@ -374,7 +388,7 @@ def date_formating(date_string):
             try:
 
                 time_pattern = r'(\d{1,2}):(\d{2})\s*(AM|PM)'
-                match = re.match(time_pattern, '02:09 AM')
+                match = re.match(time_pattern,date_string)
                 hour = int(match.group(1))
                 minute = int(match.group(2))
                 ampm = match.group(3)
@@ -392,11 +406,12 @@ def date_formating(date_string):
                 
 
 def date_coverter(input_date):
-    try :
-        d = int(input_date)
+    try:
+        d=int(input_date)
         return d
-    except :
+    except:
         if(input_date.find('post')):
+
             try:
                 filter_input =input_date.split(' (')
                 output = date_formating(filter_input[0])
@@ -404,21 +419,30 @@ def date_coverter(input_date):
                 timestamp = int(dt.timestamp())
                 return timestamp
             except:
-                pass
                 
+                try:
+                    
+                
+                    filter_input_1 =input_date.split(': ')
+                    filter_input_2 =filter_input_1[1].split(' by')[0]
+                    output = date_formating(filter_input_2)
+                    # print(output)
+                    dt = datetime.strptime(output, "%Y-%m-%d %H:%M:%S")
+                    timestamp = int(dt.timestamp())
+                    return timestamp
+                except:
+                    return input_date
+                
+        else: 
             try:
-                filter_input_1 =input_date.split(': ')
-                filter_input_2 =filter_input_1[1].split(' by')[0]
-                output = date_formating(filter_input_2)
+
+                output = date_formating(input_date)
                 # print(output)
                 dt = datetime.strptime(output, "%Y-%m-%d %H:%M:%S")
+                # print(dt)
                 timestamp = int(dt.timestamp())
                 return timestamp
             except:
-                pass
-        else:    
-            output = date_formating(input_date)
-            dt = datetime.strptime(output, "%Y-%m-%d %H:%M:%S")
-            print(dt)
-            timestamp = int(dt.timestamp())
-            return timestamp
+                return input_date
+
+
