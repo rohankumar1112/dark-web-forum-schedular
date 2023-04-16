@@ -1,3 +1,4 @@
+
 from datetime import datetime, timedelta
 import re
 
@@ -262,37 +263,37 @@ def date_formating(date_string):
                 pass    
 
             # January 29, 2023, 04:14
-            try:
-                if(date_pattern ==r'(\w+?)\s+(\d{1,2}),\s*(\d{4}),\s*(\d{2}):(\d{2})'):
+            # try:
+            #     if(date_pattern ==r'(\w+?)\s+(\d{1,2}),\s*(\d{4}),\s*(\d{2}):(\d{2})'):
                     
-                    date_pattern =r'(\w+?)\s+(\d{1,2}),\s*(\d{4}),\s*(\d{2}):(\d{2})'
+            #         date_pattern =r'(\w+?)\s+(\d{1,2}),\s*(\d{4}),\s*(\d{2}):(\d{2})'
 
-                    match = re.match(date_pattern, date_string)
-                    year = int(match.group(3))
-                    month = match.group(1)
-                    day = int(match.group(2))
-                    hour = int(match.group(4))
-                    minute = int(match.group(5))
+            #         match = re.match(date_pattern, date_string)
+            #         year = int(match.group(3))
+            #         month = match.group(1)
+            #         day = int(match.group(2))
+            #         hour = int(match.group(4))
+            #         minute = int(match.group(5))
                     
-                    dt = datetime(year, datetime.strptime(month, '%B').month, day, hour, minute, 0)
+            #         dt = datetime(year, datetime.strptime(month, '%B').month, day, hour, minute, 0)
 
-                    final_string = dt.strftime('%Y-%m-%d %H:%M:%S')
-                    return final_string
-                else:
-                    date_pattern = r'(\w+?)\s+(\d{1,2})'
+            #         final_string = dt.strftime('%Y-%m-%d %H:%M:%S')
+            #         return final_string
+            #     else:
+            #         date_pattern = r'(\w+?)\s+(\d{1,2})'
 
-                    match = re.match(date_pattern, date_string)
-                    month = match.group(1)
-                    day = int(match.group(2))
+            #         match = re.match(date_pattern, date_string)
+            #         month = match.group(1)
+            #         day = int(match.group(2))
 
-                    year = datetime.now().year
+            #         year = datetime.now().year
 
-                    dt = datetime(year, datetime.strptime(month, '%B').month, day, 0, 0, 0)
+            #         dt = datetime(year, datetime.strptime(month, '%B').month, day, 0, 0, 0)
 
-                    final_string = dt.strftime('%Y-%m-%d %H:%M:%S')
-                    return final_string
-            except:
-                pass   
+            #         final_string = dt.strftime('%Y-%m-%d %H:%M:%S')
+            #         return final_string
+            # except:
+            #     pass   
             
             try:
                 input_regex = r'(\d{2})-(\d{2})-(\d{4}),\s+(\d{2}):(\d{2})\s+(AM|PM)'
@@ -445,7 +446,7 @@ def date_coverter(input_date):
             except:
                 return input_date
 
-print(date_coverter('This post was last modified: March 26, 2022, 12:12 AM by Ura.)')) #add input
+print(date_coverter('May 20 2021 10:04:31')) #add input
 
 
 # ----done ------
@@ -464,7 +465,7 @@ print(date_coverter('This post was last modified: March 26, 2022, 12:12 AM by Ur
 #2-02-2023
 # 22-12-2023
 # "12-22-2023,03:34:45"
-# 25 days ago
+# 25 days ago
 # 1 hours ago
 # 1 years ago
 # 1 months ago
@@ -485,6 +486,6 @@ print(date_coverter('This post was last modified: March 26, 2022, 12:12 AM by Ur
 # January 29, 2023, 04:14
 # February 22, 2022
 # November 2, 2022
-# December 3, 2022
+# December 3, 2022
 # May 9, 2020, 03:29
 # -----done---
